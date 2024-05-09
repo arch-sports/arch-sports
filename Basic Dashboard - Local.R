@@ -85,7 +85,7 @@ header = dashboardHeader(title = 'Architech Sports')
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-    menuItem("Correlation", icon = icon("th"), tabName = "correlation"),
+    menuItem("Location Stats", icon = icon("th"), tabName = "locationstats"),
     menuItem("Training Data", icon = icon("dashboard"), tabName = "training")
   )
 )
@@ -97,11 +97,11 @@ body = dashboardBody(
     tabItem(tabName = "dashboard",
             fluidPage(
               fluidRow(
-                box(plotOutput("plot1"), width = 9, height = 500),
+                box(plotOutput("plot1"), width = 9, height = '50vh'),
                 
                 box(
                   width = 3,
-                  height = 500,
+                  height = '50vh',
                   selectInput(inputId = "test_choice", label = "Select test to view", choices = sort(test_columns)),
                   dateRangeInput("test_date", 
                                  label = "Select date range", 
@@ -111,7 +111,7 @@ body = dashboardBody(
                 )
               ),
               fluidRow(
-                box(plotOutput("plot2"), height = 250),
+                box(plotOutput("plot2"), height = '50vh'),
                 
                 box(
                   title = "Inputs", status = "warning",
@@ -128,7 +128,18 @@ body = dashboardBody(
     ),
     
     # Second tab content
-    tabItem(tabName = "correlation",
+    tabItem(tabName = "locationstats",
+            fluidRow(
+              box(
+                width = 2,
+                title = 'Location by Test',
+                selectInput(inputId = 'location_boxplot_test', label = 'Select test to view', choices = test_columns)
+              ),
+              box(
+                width = 10,
+                plotOutput('location_boxplot')
+              )
+            ),
             fluidRow(
               column(
                 height = 'auto',
@@ -160,23 +171,27 @@ body = dashboardBody(
               ),
               column(
                 width = 10,
+                div(style = 'height:100%'),
                 box(
+                  height = 'auto',
                   width = NULL,
                   status = 'primary',
                   solidHeader = TRUE,
                   title = "Estimated 1RM",
-                  plotOutput("plot4")
+                  plotOutput("plot4", '100%')
                 ),
                 box(
+                  height = 'auto',
                   width = NULL,
                   status = 'primary',
                   title = "Volume",
-                  plotOutput("plot5")
+                  plotOutput("plot5", '100%')
                 ),
                 box(
+                  height = 'auto',
                   width = NULL,
                   title = "Tonnage",
-                  plotOutput("plot6")
+                  plotOutput("plot6", '100%')
                 )
               )
             )
@@ -214,9 +229,22 @@ server <- function(input, output, session) {
     
   })
   
+#Location Stats Plots
+  
   output$plot3 <- renderPlot({
     res <- cor(as.data.frame(test.data[c(-1,-2,-3)]), use = "pairwise.complete.obs", method = "pearson")
     corrplot(res, method = "color", type = "upper")
+  })
+  
+  output$location_boxplot <- renderPlot({
+    ggplot(data = test.data, mapping = aes(x = LOCATION, y = .data[[input$location_boxplot_test]])) +
+      geom_boxplot(fill = "bisque",color = "black", alpha = 0.3) +
+      geom_jitter(aes(color = 'blue'), alpha=0.2) +
+      labs(x = "Location") +
+      ggtitle("Summary of Tests by Location") +
+      guides(color = "none") +
+      theme_minimal() +
+      coord_cartesian(ylim = quantile(sub_airline$ArrDelay, c(0, 0.99)))
   })
   
   output$plot4 <- renderPlot({
