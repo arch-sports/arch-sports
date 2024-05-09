@@ -24,7 +24,8 @@ library(bslib)
 
 # test.data = read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
 # train.data = read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")
-test_columns = names(test.data)[c(-1, -2, -3)]
+test.data <- cbind(Location = "Ballantyne", test.data)
+test_columns = names(test.data)[c(-1, -2, -3, -4)]
 train_athletes = sort(unique(train.data$NAME))
 
 #Create header
@@ -232,19 +233,20 @@ server <- function(input, output, session) {
 #Location Stats Plots
   
   output$plot3 <- renderPlot({
-    res <- cor(as.data.frame(test.data[c(-1,-2,-3)]), use = "pairwise.complete.obs", method = "pearson")
+    res <- cor(as.data.frame(test.data[c(-1,-2,-3, -4)]), use = "pairwise.complete.obs", method = "pearson")
     corrplot(res, method = "color", type = "upper")
   })
   
   output$location_boxplot <- renderPlot({
-    ggplot(data = test.data, mapping = aes(x = LOCATION, y = .data[[input$location_boxplot_test]])) +
-      geom_boxplot(fill = "bisque",color = "black", alpha = 0.3) +
+    column <- test.data[[input$location_boxplot_test]]
+    ggplot(data = test.data, mapping = aes(x = Location, y = .data[[input$location_boxplot_test]])) +
+      geom_boxplot(fill = "red",color = "black", alpha = 0.3) +
       geom_jitter(aes(color = 'blue'), alpha=0.2) +
       labs(x = "Location") +
       ggtitle("Summary of Tests by Location") +
       guides(color = "none") +
       theme_minimal() +
-      coord_cartesian(ylim = quantile(sub_airline$ArrDelay, c(0, 0.99)))
+      coord_cartesian(ylim = quantile(column, c(0, 0.99), na.rm = TRUE))
   })
   
   output$plot4 <- renderPlot({
