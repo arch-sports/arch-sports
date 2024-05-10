@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib")
+using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib", "ggplot2")
 
 
 library(shiny)
@@ -21,11 +21,20 @@ library(tidyverse)
 library(corrplot)
 library(lubridate)
 library(bslib)
+library(ggplot2)
+#library(gghighlight)
 
-# test.data = read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
-# train.data = read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")
-test.data <- cbind(Location = "Ballantyne", test.data)
-test_columns = names(test.data)[c(-1, -2, -3, -4)]
+#test.data <- read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
+#train.data <- read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")
+if(!('Location' %in% colnames(test.data))){
+  test.data <- cbind(Location = "Ballantyne", test.data)
+}
+if(!('Month' %in% colnames(test.data))){
+  test.data <- cbind(Month = paste(year(test.data$Date), "-", month(test.data$Date)), test.data)
+}
+
+test.data[test.data == 0] <- NA
+test_columns = names(test.data)[c(-1, -2, -3, -4, -5)]
 train_athletes = sort(unique(train.data$NAME))
 
 #Create header
@@ -98,13 +107,13 @@ body = dashboardBody(
     tabItem(tabName = "dashboard",
             fluidPage(
               fluidRow(
-                box(plotOutput("plot1"), width = 9, height = '50vh'),
+                box(plotOutput("test_densityplot"), width = 9, height = '50vh'),
                 
                 box(
                   width = 3,
                   height = '50vh',
-                  selectInput(inputId = "test_choice", label = "Select test to view", choices = sort(test_columns)),
-                  dateRangeInput("test_date", 
+                  selectInput(inputId = "test_densityplot_choice", label = "Select test to view", choices = sort(test_columns)),
+                  dateRangeInput("test_densityplot_date", 
                                  label = "Select date range", 
                                  max = Sys.Date(), 
                                  start = trunc.Date(Sys.Date(), units = "months"), 
@@ -209,11 +218,13 @@ server <- function(input, output, session) {
     updateSelectInput(session, "train_choice", choices = choices)
   })
   
-  output$plot1 <- renderPlot({
-    data_time <- as_tbl_time(na.omit(test.data), index = Date)
-    filtered_data <- filter_time(data_time, time_formula = input$test_date[1] ~ input$test_date[2])
-    data <- density(filtered_data[[input$test_choice]])
-    plot(data, main="Distribution of Test Scores")
+  output$test_densityplot <- renderPlot({
+    data <- test.data %>%
+      select(Date, Month, input$test_densityplot_choice) %>%
+      group_by(Month)
+
+    ggplot(data, aes(x = .data[[input$test_densityplot_choice]], color = Month), na.rm = TRUE) +
+      geom_density()
   })
   
   output$plot2 <- renderPlot({
