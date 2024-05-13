@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib")
+using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib", "plotly")
 
 
 library(shiny)
@@ -21,6 +21,7 @@ library(tidyverse)
 library(corrplot)
 library(lubridate)
 library(bslib)
+library(plotly)
 
 test.data <- read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
 train.data <- read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")

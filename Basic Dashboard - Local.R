@@ -8,7 +8,7 @@ using<-function(...) {
   }
 }
 
-using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib", "ggplot2")
+using("shiny", "shinydashboard", "googlesheets4", "tibbletime", "dplyr", "tidyverse", "corrplot", "lubridate", "bslib", "ggplot2", "plotly")
 
 
 library(shiny)
@@ -22,7 +22,7 @@ library(corrplot)
 library(lubridate)
 library(bslib)
 library(ggplot2)
-#library(gghighlight)
+library(plotly)
 
 #test.data <- read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
 #train.data <- read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")
@@ -95,8 +95,9 @@ header = dashboardHeader(title = 'Architech Sports')
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-    menuItem("Location Stats", icon = icon("th"), tabName = "locationstats"),
-    menuItem("Training Data", icon = icon("dashboard"), tabName = "training")
+    menuItem("Testing Table", tabName = "testTable", icon = icon("table")),
+    menuItem("Location Stats", tabName = "locationstats", icon = icon("th")),
+    menuItem("Training Data", tabName = "training", icon = icon("dashboard"))
   )
 )
 
@@ -107,7 +108,7 @@ body = dashboardBody(
     tabItem(tabName = "dashboard",
             fluidPage(
               fluidRow(
-                box(plotOutput("test_densityplot"), width = 9, height = '50vh'),
+                box(plotlyOutput("test_densityplot"), width = 9, height = '50vh'),
                 
                 box(
                   width = 3,
@@ -218,13 +219,21 @@ server <- function(input, output, session) {
     updateSelectInput(session, "train_choice", choices = choices)
   })
   
-  output$test_densityplot <- renderPlot({
+  
+  output$test_densityplot <- renderPlotly({
     data <- test.data %>%
-      select(Date, Month, input$test_densityplot_choice) %>%
-      group_by(Month)
+      group_by(Month) %>%
+      select(Month, input$test_densityplot_choice) %>%
+      summarize_at(vars(input$test_densityplot_choice),
+                   list(Mean = mean),
+                   na.rm = TRUE)
+      
 
-    ggplot(data, aes(x = .data[[input$test_densityplot_choice]], color = Month), na.rm = TRUE) +
-      geom_density()
+    ggplot(data, mapping = aes(x = Month, y = Mean, color = Month), na.rm = TRUE) +
+      geom_line() +
+      geom_smooth() +
+      geom_point()
+    
   })
   
   output$plot2 <- renderPlot({
