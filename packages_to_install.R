@@ -1,0 +1,14 @@
+install.packages(
+  c('Hmisc',
+    'qreport',
+    'data.table',
+    'haven',
+    'rio',
+    'ggplot2',
+    'gt',
+    'consort',
+    'plotly',
+    'rms',
+    'knitr',
+    'gridExtra')
+)
