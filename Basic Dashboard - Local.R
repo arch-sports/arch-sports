@@ -26,13 +26,18 @@ library(plotly)
 
 #test.data <- read_sheet("https://docs.google.com/spreadsheets/d/1VzdlsDCA-X8HVKvUktG1A5XZNiq3IuOwX2Zbq8k6Iu0/", "MASTER DATA TABLE")
 #train.data <- read_sheet("https://docs.google.com/spreadsheets/d/1MY7WtWH4ba4npaUHOYmZ4OotMZwp8k_jVTCBhqOSeyU/", "TRAINING DATA")
-if(!('Location' %in% colnames(test.data))){
-  test.data <- cbind(Location = "Ballantyne", test.data)
-}
-if(!('Month' %in% colnames(test.data))){
-  test.data <- cbind(Month = paste(year(test.data$Date), "-", month(test.data$Date)), test.data)
-}
+# if(!('Location' %in% colnames(test.data))){
+#   test.data <- cbind(Location = "Ballantyne", test.data)
+# }
+# if(!('Month' %in% colnames(test.data))){
+#   test.data <- cbind(Month = paste(year(test.data$Date), "-", month(test.data$Date)), test.data)
+# }
 
+test.data.Ball <- read_csv("Ballantyne Test Data.csv")
+train.data.Ball <- read_csv("Ballantyne Training Data.csv")
+test.data.Pine <- read_csv("Pineville Test Data.csv")
+
+summary_data <- test.data.Ball
 test.data[test.data == 0] <- NA
 test_columns = names(test.data)[c(-1, -2, -3, -4, -5)]
 train_athletes = sort(unique(train.data$NAME))
@@ -94,6 +99,7 @@ header = dashboardHeader(title = 'Architech Sports')
 #Create sidebar
 sidebar <- dashboardSidebar(
   sidebarMenu(
+    menuItem("Summary Stats", tabName = 'summaryStats', icon = icon("dashboard")),
     menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
     menuItem("Testing Table", tabName = "testTable", icon = icon("table")),
     menuItem("Location Stats", tabName = "locationstats", icon = icon("th")),
@@ -104,6 +110,18 @@ sidebar <- dashboardSidebar(
 #Create body
 body = dashboardBody(
   tabItems(
+    #Summary Stats By Location
+    tabItem(tabName = 'summaryStats',
+            fluidPage(
+              fluidRow(
+                box(
+                  selectInput(inputId = 'summary_location', label = 'Select location to view', choices = c('Ballantyne', 'Pineville'))
+                )
+              ),
+              plotlyOutput('summary_statsplot')
+            )
+    ),
+    
     # First tab content
     tabItem(tabName = "dashboard",
             fluidPage(
@@ -219,6 +237,27 @@ server <- function(input, output, session) {
     updateSelectInput(session, "train_choice", choices = choices)
   })
   
+  eventReactive(input$summary_location, {
+    summary_data <- switch(input$summary_location, 
+                           "Ballantyne" = test.data.Ball,
+                           "Pineville" = test.data.Pine)
+  })
+  
+  output$summary_statsplot <- renderPlotly({
+    data <- summary_data %>%
+      group_by(Month) %>%
+      summarize_at(vars(c(names(summary_data)[7:ncol(summary_data)])),
+                   list(Mean = mean),
+                   na.rm = TRUE)
+    
+    melt_data <- melt(as.data.table(data))
+    
+    ggplot(melt_data, mapping = aes(x = Month, y = value), na.rm = TRUE) +
+      geom_smooth() +
+      geom_point() +
+      facet_grid(~variable, scales = 'free', cols = 2, rows = ceiling(ncol(data)/2))
+      
+  })
   
   output$test_densityplot <- renderPlotly({
     data <- test.data %>%
