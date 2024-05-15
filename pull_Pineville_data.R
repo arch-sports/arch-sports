@@ -1,3 +1,5 @@
+start_time <- Sys.time()
+
 library(googlesheets4)
 library(tidyverse)
 
@@ -23,7 +25,9 @@ female_data <- NULL
 male_missed <- list()
 female_missed <- list()
 
+counter = 1
 for (name in male_sheet_names) {
+  print(paste(counter, 'of', length(male_sheet_names)))
   if(!(name %in% male_data$Name)){
     tryCatch({
       range_write(male_url, data = test_header, sheet = name, range = "C2:J2")
@@ -42,11 +46,17 @@ for (name in male_sheet_names) {
       append(male_missed, name)
     }
     )
-    
   }
+  counter = counter + 1
 }
 
+male_time <- Sys.time()
+time_taken <- male_time - start_time
+print(paste('Time to complete male data:',time_taken))
+
+counter = 1
 for (name in female_sheet_names) {
+  print(paste(counter, 'of', length(female_sheet_names)))
   if(!(name %in% female_data$Name)){
     tryCatch({
       range_write(female_url, data = test_header, sheet = name, range = "C2:J2")
@@ -67,8 +77,14 @@ for (name in female_sheet_names) {
     )
     
   }
+  counter = counter + 1
 }
 
-male_data <- mutate("M/F" = "Male")
-female_data <- mutate("M/F" = "Female")
+male_data <- mutate(male_data, "M/F" = "Male")
+female_data <- mutate(female_data, "M/F" = "Female")
 full_data <- rbind(male_data, female_data)
+write.csv(full_data, file = "Pineville Data.csv")
+
+end_time <- Sys.time()
+time_taken <- end_time - start_time
+print(paste('Time taken:', time_taken))
