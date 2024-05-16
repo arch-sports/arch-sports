@@ -29,71 +29,19 @@ library(plotly)
 # if(!('Location' %in% colnames(test.data))){
 #   test.data <- cbind(Location = "Ballantyne", test.data)
 # }
-# if(!('Month' %in% colnames(test.data))){
-#   test.data <- cbind(Month = paste(year(test.data$Date), "-", month(test.data$Date)), test.data)
-# }
 
 test.data.Ball <- read_csv("Ballantyne Test Data.csv")
 train.data.Ball <- read_csv("Ballantyne Training Data.csv")
 test.data.Pine <- read_csv("Pineville Test Data.csv")
 
 summary_data <- test.data.Ball
-test.data[test.data == 0] <- NA
-test_columns = names(test.data)[c(-1, -2, -3, -4, -5)]
-train_athletes = sort(unique(train.data$NAME))
+test.data.Ball[test.data.Ball == 0] <- NA
+test.data.Pine[test.data.Pine == 0] <- NA
+train.data.Ball[train.data.Ball == 0] <- NA
+test_columns = names(test.data.Ball)[c(-1, -2, -3, -4, -5)]
+train_athletes = sort(unique(train.data.Ball$NAME))
 
 #Create header
-# dropdown_message = dropdownMenu(type = "messages",
-#                                 messageItem(
-#                                   from = "Sales Dept",
-#                                   message = "Sales are steady this month."
-#                                 ),
-#                                 messageItem(
-#                                   from = "New User",
-#                                   message = "How do I register?",
-#                                   icon = icon("question"),
-#                                   time = "13:45"
-#                                 ),
-#                                 messageItem(
-#                                   from = "Support",
-#                                   message = "The new server is ready.",
-#                                   icon = icon("life-ring"),
-#                                   time = "2014-12-01"
-#                                 )
-#                               )
-# 
-# notifications = dropdownMenu(type = "notifications",
-#                              notificationItem(
-#                                text = "5 new users today",
-#                                icon("users")
-#                              ),
-#                              notificationItem(
-#                                text = "12 items delivered",
-#                                icon("truck"),
-#                                status = "success"
-#                              ),
-#                              notificationItem(
-#                                text = "Server load at 86%",
-#                                icon = icon("exclamation-triangle"),
-#                                status = "warning"
-#                              )
-#                             )
-# 
-# tasks = dropdownMenu(type = "tasks", badgeStatus = "success",
-#                      taskItem(value = 90, color = "green",
-#                               "Documentation"
-#                      ),
-#                      taskItem(value = 17, color = "aqua",
-#                               "Project X"
-#                      ),
-#                      taskItem(value = 75, color = "yellow",
-#                               "Server deployment"
-#                      ),
-#                      taskItem(value = 80, color = "red",
-#                               "Overall project"
-#                      )
-#                   )
-
 header = dashboardHeader(title = 'Architech Sports')
 
 #Create sidebar
@@ -118,7 +66,11 @@ body = dashboardBody(
                   selectInput(inputId = 'summary_location', label = 'Select location to view', choices = c('Ballantyne', 'Pineville'))
                 )
               ),
-              plotlyOutput('summary_statsplot')
+              column(
+                height = 'auto',
+                width = 12,
+                plotlyOutput('summary_statsplot', height = 1000)
+              )
             )
     ),
     
@@ -145,7 +97,7 @@ body = dashboardBody(
                 box(
                   title = "Inputs", status = "warning",
                   selectInput(inputId = "test_choice2", label = "Select test to view", choices = test_columns),
-                  selectInput(inputId = "athlete_choice", label = "Select athlete to view", choices = sort(unique(test.data$Name))),
+                  selectInput(inputId = "athlete_choice", label = "Select athlete to view", choices = sort(unique(test.data.Ball$Name))),
                   dateRangeInput("test_date2", 
                                  label = "Select date range", 
                                  max = Sys.Date(), 
@@ -237,26 +189,25 @@ server <- function(input, output, session) {
     updateSelectInput(session, "train_choice", choices = choices)
   })
   
-  eventReactive(input$summary_location, {
-    summary_data <- switch(input$summary_location, 
-                           "Ballantyne" = test.data.Ball,
-                           "Pineville" = test.data.Pine)
-  })
+  summary_data <- reactive(switch(input$summary_location, "Ballantyne" = test.data.Ball, "Pineville" = test.data.Pine))
   
   output$summary_statsplot <- renderPlotly({
-    data <- summary_data %>%
-      group_by(Month) %>%
-      summarize_at(vars(c(names(summary_data)[7:ncol(summary_data)])),
-                   list(Mean = mean),
-                   na.rm = TRUE)
+    summary <- summary_data()
+    data <- summary %>%
+      group_by(Month = format(floor_date(Date, 'month'), '%m-%y')) %>%
+      select(c(6:ncol(summary)))
+      # summarize_at(vars(c(names(summary)[6:ncol(summary)])),
+      #              list(Mean = mean),
+      #              na.rm = TRUE)
     
-    melt_data <- melt(as.data.table(data))
+    melt_data <- melt(as.data.table(data), id = 'Month')
     
     ggplot(melt_data, mapping = aes(x = Month, y = value), na.rm = TRUE) +
-      geom_smooth() +
-      geom_point() +
-      facet_grid(~variable, scales = 'free', cols = 2, rows = ceiling(ncol(data)/2))
-      
+      # geom_line() +
+      # geom_smooth(method = 'lm', color = 'red') +
+      # geom_point() +
+      geom_boxplot() +
+      facet_wrap(~variable, scales = 'free', ncol = 3, nrow = 6)
   })
   
   output$test_densityplot <- renderPlotly({
@@ -276,7 +227,7 @@ server <- function(input, output, session) {
   })
   
   output$plot2 <- renderPlot({
-    data_test <- filter(test.data, Name == input$athlete_choice)
+    data_test <- filter(test.data.Ball, Name == input$athlete_choice)
     data_with_dates <- data.table("Date" = data_test[["Date"]], "Test" = data_test[[input$test_choice2]])
     tryCatch(
       {
