@@ -2,6 +2,7 @@ start_time <- Sys.time()
 
 library(googlesheets4)
 library(tidyverse)
+library(dplyr)
 
 male_url <- "https://docs.google.com/spreadsheets/d/1VjX6dNpz1PX9mLZGPpX2utJ4Ti28ZyBoVD9nXDWj-r4"
 female_url <- "https://docs.google.com/spreadsheets/d/13QQ1Oozw8Xiard1pw5bHKfflRrMU4jNIWPxXbJLN1OE"
@@ -83,7 +84,9 @@ for (name in female_sheet_names) {
 male_data <- mutate(male_data, "M/F" = "Male")
 female_data <- mutate(female_data, "M/F" = "Female")
 full_data <- rbind(male_data, female_data)
-write.csv(full_data, file = "Pineville Data.csv")
+full_data <- cbind(Location = "Pineville", full_data) %>%
+  relocate(c('Name', 'M/F'), .before = Date)
+write.csv(full_data, file = "Pineville Test Data.csv", row.names = FALSE)
 
 end_time <- Sys.time()
 time_taken <- end_time - start_time

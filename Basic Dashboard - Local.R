@@ -34,6 +34,10 @@ test.data.Ball <- read_csv("Ballantyne Test Data.csv")
 train.data.Ball <- read_csv("Ballantyne Training Data.csv")
 test.data.Pine <- read_csv("Pineville Test Data.csv")
 
+test.data.Pine <- test.data.Pine[c(-1)] 
+test.data.Pine <- cbind(Location = "Pineville", test.data.Pine)
+test.data.Pine <- relocate(test.data.Pine, c('Name', 'M/F'), .before = Date)
+
 summary_data <- test.data.Ball
 test.data.Ball[test.data.Ball == 0] <- NA
 test.data.Pine[test.data.Pine == 0] <- NA
@@ -206,8 +210,8 @@ server <- function(input, output, session) {
       # geom_line() +
       # geom_smooth(method = 'lm', color = 'red') +
       # geom_point() +
-      geom_boxplot() +
-      facet_wrap(~variable, scales = 'free', ncol = 3, nrow = 6)
+      geom_boxplot(fill = 'bisque') +
+      facet_grid(rows = vars(variable), scales = 'free', space = 'free')
   })
   
   output$test_densityplot <- renderPlotly({
