@@ -61,3 +61,102 @@ for (location in locations) {
     trainData[[location]] <- read.csv(file = file.path(path, file_name))
   }
 }
+
+# testData$Ballantyne <-
+#   upData(testData$Ballantyne,
+#          labels = c(
+#            Age.At.Testing = 'Age',
+#            CMJ...Flight = 'Countermovement Jump - Flight Time',
+#            CMJ...Imp.Mom = 'Countermovement Jump - Impulse-Momentum',
+#            Broad.Jump = 'Broad Jump',
+#            IMTP.Peak = 'Isometric Mid-Thigh Pull - Peak Force',
+#            IMTP.F.BW = 'Isometric Mid-Thigh Pull - F/BW',
+#            Flexed.Hang = 'Flexed Arm Hang',
+#            Pull.Ups = 'Pull Ups',
+#            X20.Yard.Sprint = '20-Yard Sprint',
+#            X10.Yard.Split = '10-Yard Split',
+#            X5.10.5 = '5-10-5 Pro Agility',
+#            Yo.Yo = 'Yo-Yo Level 2',
+#            X300.Yd = '300-Yard Shuttle',
+#            Nordbord.Max.L = 'Nordbord Max Left',
+#            Nordbord.Max.R = 'Nordbord Max Right',
+#            Nordbord...Diff = 'Nordbord % Difference',
+#            DSI = 'Dynamic Strength Index'
+#          ),
+#          units = .q(
+#            Age.At.Testing = years,
+#            CMJ...Flight = inches,
+#            CMJ...Imp.Mom = inches,
+#            Broad.Jump = inches,
+#            IMTP.Peak = N,
+#            IMTP.F.BW = 'N/kg',
+#            Flexed.Hang = s,
+#            X20.Yard.Sprint = s,
+#            X10.Yard.Split = s,
+#            X5.10.5 = s,
+#            X300.Yd = s,
+#            Nordbord.Max.L = N,
+#            Nordbord.Max.R = N
+#          )
+#   )
+# 
+# testData$Pineville <-
+#   upData(testData$Pineville,
+#          labels = c(
+#            Age.At.Testing = 'Age',
+#            Vertical.Jump = 'Vertical Jump',
+#            Broad.Jump = 'Broad Jump',
+#            Sprint.40yd = '40-Yard Sprint',
+#            R.5.10.5 = '5-10-5 Pro Agility Right',
+#            L.5.10.5 = '5-10-5 Pro Agility Left',
+#            Yo.Yo.Test.Level.2 = 'Yo-Yo Level 2',
+#            Yo.Yo.Test.Level.1 = 'Yo-Yo Level 1',
+#            Box.Drill = 'Box Drill'
+#          ),
+#          units = .q(
+#            Vertical.Jump = inches,
+#            Broad.Jump = inches,
+#            Sprint.40yd = s,
+#            R.5.10.5 = s,
+#            L.5.10.5 = s,
+#            Box.Drill = s
+#          )
+#   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
