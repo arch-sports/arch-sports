@@ -1,6 +1,20 @@
-library(googlesheets4)
-library(tidyverse)
-library(dplyr)
+if(!require(pacman)){
+  install.packages('pacman')
+}
+library(pacman)
+
+p_load(
+  googlesheets4,
+  tidyverse,
+  dplyr,
+  zoo,
+  vtable,
+  slider
+)
+
+perc_change <- function(list) {
+  slide(list, ~((.x - .x[1])/.x[1] * 100)[2], .before = 1)
+}
 
 setwd(getSrcDirectory(function(){}))
 
@@ -29,14 +43,17 @@ train.Sheets <- list(
 )
 
 #Create list of dataframes
-testData = vector(mode = 'list', length = length(names(test.URL)))
-trainData = vector(mode = 'list', length = length(names(train.URL)))
+testData = vector(mode = 'list', length = length(locations))
+trainData = vector(mode = 'list', length = length(locations))
 
 names(testData) <- names(test.URL)
 names(trainData) <- names(train.URL)
 
-labels = vector(mode = 'list', length = length(names(test.URL)))
+labels = vector(mode = 'list', length = length(locations))
 names(labels) <- names(test.URL)
+
+#Create list of tests
+tests = vector(mode = 'list', length = length(locations))
 
 #Read data into csv
 for (location in locations) {
@@ -53,9 +70,12 @@ for (location in locations) {
   }
   testData[[location]] <- read.csv(file = file.path(path, file_name))
   
+  #Get tests from each location
+  tests[[location]] <- names(testData[[location]])[4:ncol(testData[[location]])]
+  
+  #Training data
   path <- paste('Data/', location, sep = "")
   file_name <- paste(location, '_Training.csv', sep = "")
-  #Training data
   if(location %in% names(train.URL) && !file.exists(file.path(path, file_name))){
     read_sheet(as.character(train.URL[location]), as.character(train.Sheets[location])) %>%
       write.csv(file = file.path(path, file_name), row.names = FALSE)
@@ -66,7 +86,6 @@ for (location in locations) {
 }
 
 labels$Ballantyne <- c(
-  Age.At.Testing = 'Age',
   CMJ...Flight = 'CMJ - Flight Time',
   CMJ...Imp.Mom = 'CMJ - Impulse-Momentum',
   Broad.Jump = 'Broad Jump',
@@ -86,7 +105,6 @@ labels$Ballantyne <- c(
 )
 
 labels$Pineville <- c(
-  Age.At.Testing = 'Age',
   Vertical.Jump = 'Vertical Jump',
   Broad.Jump = 'Broad Jump',
   Sprint.40yd = '40-Yard Sprint',
@@ -97,7 +115,31 @@ labels$Pineville <- c(
   Box.Drill = 'Box Drill'
 )
 
-#testData$Ballantyne %>% mutate(Month = format.Date(Date, '%m/%y')) %>% group_by(Month) %>% select(Month, testsBallantyne) %>% sumtable(group = 'Month', numformat = c('', 'Nordbord...Diff' = 'percent'), labels = labels$Ballantyne, group.long = TRUE)
+testData$Ballantyne %>% 
+  mutate(Date = as.yearmon(Date)) %>% 
+  group_by(Date) %>%
+  select(Date, tests$Ballantyne) %>%
+  summarize(across(where(is.numeric), ~ perc_change(.x))) %>%
+  arrange(desc(Date)) %>%
+  sumtable(group = 'Date', 
+           numformat = c('', 'Nordbord...Diff' = 'percent'), 
+           #summ = 'perc_change(x)',
+           labels = labels$Ballantyne, 
+           group.long = TRUE)
+
+testData$Pineville %>%
+  mutate(Date = as.yearmon(Date)) %>%
+  group_by(Date) %>%
+  select(Date, tests$Pineville) %>%
+  summarize(across(where(is.numeric), list('Perc. Change' = perc_change))) %>%
+  arrange(desc(Date)) %>%
+  sumtable(group = 'Date',
+           out = 'browser',
+           #summ = 'perc_change(x)',
+           labels = labels$Pineville,
+           group.long = TRUE)
+
+
 
 
 
