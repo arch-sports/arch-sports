@@ -39,6 +39,6 @@ output <- gt(d)                                                |>
 
 print(output)
 
-options(prType='html')
+options(prType='pdf')
 des <- describe(support)
 print(des, 'continuous')

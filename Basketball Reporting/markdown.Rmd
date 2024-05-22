@@ -1,0 +1,32 @@
+---
+title: "Report"
+author: "XXX"
+date: "January 7, 2017"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Output
+
+```{r}
+x <- rnorm(100, 40, 3)
+x
+
+y <- rnorm(100, 100, 5)
+y
+
+fit <- lm(y ~ x)
+summary(fit)
+```
+
+## Plot
+
+```{r plot, echo=FALSE}
+plot(y)
+```
