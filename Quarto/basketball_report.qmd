@@ -1,0 +1,45 @@
+---
+title: "Pro Skill Basketball"
+author: "Architech Sports"
+format: pdf
+editor: visual
+echo: false
+warning: false
+---
+
+```{r}
+#setwd(getSrcDirectory(function(){}))
+```
+
+```{r}
+#| label: fig-mpg
+#| fig-cap: "Distributions of testing scores"
+#| fig-subcap:
+#|   - "Countermovement Jump Height, in centimeters"
+#|   - "5-10-5 Pro Agility Drill, in seconds"
+#| layout-ncol: 2
+
+library(data.table)
+library(ggplot2)
+library(tidyverse)
+data <- read.csv(file = './basketball_random.csv') %>%
+  mutate(Name = paste('First', 'Last')) %>%
+  mutate(CMJ = CMJ*2.54)
+norms_cmj <- read.csv(file = './norms_basketball.csv')
+
+ggplot(data, mapping = aes(x = CMJ)) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  geom_vline(xintercept = norms$Jump.Height..cm.[norms$Percentile == '50th']) +
+  geom_label(label = '50th', 
+             x = norms$Jump.Height..cm.[norms$Percentile == '50th'], 
+             y = 1,
+             label.padding = unit(0.55, 'lines'),
+             label.size = 0.35) +
+  theme_classic()
+
+ggplot(data, mapping = aes(x = Agility)) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  theme_classic()
+
+ggplot(data, mapping = aes(x = ))
+```
