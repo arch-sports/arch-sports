@@ -1,45 +1,151 @@
 ---
-title: "Pro Skill Basketball"
-author: "Architech Sports"
-format: pdf
+title-block-banner: 'red'
+title: "Pro Skills Basketball"
+author: "Architech Sports and Physical Therapy"
+format: 
+  pdf:
+    fig-width: 4
+    fig-height: 2.25
+    fig-pos: h
+fig-cap-location: bottom
+fig-align: center
+tbl-cap-location: top
+margin-top: 1.0in
+margin-left: 0.75in
 editor: visual
-echo: false
-warning: false
+execute: 
+  cache: true
+  echo: false
+  warning: false
 ---
 
 ```{r}
 #setwd(getSrcDirectory(function(){}))
 ```
 
+# Countermovement Jump Results
+
 ```{r}
-#| label: fig-mpg
-#| fig-cap: "Distributions of testing scores"
+#| label: fig-cmj
+#| fig-cap: "Distributions of CMJ results"
 #| fig-subcap:
 #|   - "Countermovement Jump Height, in centimeters"
-#|   - "5-10-5 Pro Agility Drill, in seconds"
+#|   - "Reactive Strength Index - Modified, in m/s"
+#|   - 'Functional Movement Screen Scores'
 #| layout-ncol: 2
 
 library(data.table)
 library(ggplot2)
 library(tidyverse)
 data <- read.csv(file = './basketball_random.csv') %>%
-  mutate(Name = paste('First', 'Last')) %>%
   mutate(CMJ = CMJ*2.54)
 norms_cmj <- read.csv(file = './norms_basketball.csv')
 
 ggplot(data, mapping = aes(x = CMJ)) +
+  geom_rect(xmin = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
-  geom_vline(xintercept = norms$Jump.Height..cm.[norms$Percentile == '50th']) +
-  geom_label(label = '50th', 
-             x = norms$Jump.Height..cm.[norms$Percentile == '50th'], 
-             y = 1,
-             label.padding = unit(0.55, 'lines'),
-             label.size = 0.35) +
-  theme_classic()
+  xlab('Countermovement Jump Height') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
 
-ggplot(data, mapping = aes(x = Agility)) +
+ggplot(data, mapping = aes(x = mRSI)) +
+  geom_rect(xmin = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
-  theme_classic()
+  xlab('Reactive Strength Index - Modified') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
 
-ggplot(data, mapping = aes(x = ))
+```
+
+# 5-10-5 Agility Shuttle Results
+
+```{r}
+#| label: fig-agility
+#| fig-cap: 'Distribution of 5-10-5 results'
+#| fig-subcap: 
+#|   - '5-10-5 Agility Shuttle - Left, in seconds'
+#|   - '5-10-5 Agility Shuttle - Right, in seconds'
+#| layout-ncol: 2
+
+norms_agility <- read.csv(file = './norms_agility.csv')
+
+ggplot(data, mapping = aes(x = AgilityL)) +
+  geom_rect(xmin = norms_agility$Time[norms_agility$Percentile == 30],
+            xmax = norms_agility$Time[norms_agility$Percentile == 70],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Left Start') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+ggplot(data, mapping = aes(x = AgilityR)) +
+  geom_rect(xmin = norms_agility$Time[norms_agility$Percentile == 30],
+            xmax = norms_agility$Time[norms_agility$Percentile == 70],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Right Start') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+```
+
+{{< pagebreak >}}
+
+# FMS Overhead Squat
+
+```{r}
+#| label: fig-FMS
+#| fig-cap: 'Count of FMS Overhead Squat Scores'
+#| fig-subcap: 
+#|   - '3: Successful completion of movement.
+#|      2: Completion with modification.
+#|      1: Unsuccessful completion even with modification.
+#|      0: Experienced pain/discomfort during movement.'
+
+ggplot(data, mapping = aes(x = FMS)) +
+  geom_histogram(bins = 4, color = 'black', fill = 'red', alpha = 0.5) +
+  xlab('FMS Overhead Squat') +
+  theme_classic()
+```
+
+{{< pagebreak >}}
+
+# Raw Data {#raw-data}
+
+```{r}
+#| output: asis
+library(knitr)
+library(vtable)
+library(dplyr)
+library(kableExtra)
+
+sumtable(data, simple.kable = TRUE)
+  
+data %>%
+  arrange(by = Athlete) %>%
+  kable(caption = 'Raw data from testing.', 
+        digits = 2, 
+        format.args = list(scientific = FALSE))
+
+
 ```
