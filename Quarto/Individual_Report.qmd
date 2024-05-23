@@ -1,5 +1,5 @@
 ---
-title: \Huge Pro Skills Basketball Test Results
+title: \Huge Individual Test Results - `r params$Athlete`
 title-block-style: plain
 author: \huge Architech Sports and Physical Therapy
 format: 
@@ -7,7 +7,7 @@ format:
     fig-width: 4
     fig-height: 2.25
     fig-pos: h
-    output-file: 'Pro_Skills_Test_Results'
+    output-file: '`r params$Athlete`'
     output-ext: 'pdf'
 fig-cap-location: bottom
 fig-align: center
@@ -15,6 +15,8 @@ tbl-cap-location: top
 margin-top: 1.0in
 margin-left: 0.75in
 editor: visual
+params:
+  Athlete: 'NA'
 execute: 
   cache: true
   echo: false
@@ -55,6 +57,7 @@ ggplot(data, mapping = aes(x = CMJ)) +
             fill = 'grey',
             alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
+  geom_vline(xintercept = data$CMJ[data$Athlete == params$Athlete]) +
   xlab('Countermovement Jump Height') +
   ylab(element_blank()) +
   theme(axis.text.y = element_blank(),
@@ -68,6 +71,7 @@ ggplot(data, mapping = aes(x = mRSI)) +
             fill = 'grey',
             alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
+  geom_vline(xintercept = data$mRSI[data$Athlete == params$Athlete]) +
   xlab('Reactive Strength Index - Modified') +
   ylab(element_blank()) +
   theme(axis.text.y = element_blank(),
@@ -80,7 +84,7 @@ ggplot(data, mapping = aes(x = mRSI)) +
 
 |    The countermovement jump is an excellent measure of lower body power and explosiveness. Through the use of the Vald ForceDecks, we are able to accurately measure the force an athlete produces over time, which leads to a precise measurement of the athlete's jump height alongside a range of other useful metrics, such as peak power, the duration of different phases of the jump, and the Reactive Strength Index - Modified (mRSI).
 |    One of the more useful metrics gathered from the assessment, the mRSI captures a few important characteristics of the jump into one single measurement. Calculated by dividing the Jump Height by the time to takeoff, the mRSI shows how "springy" an athlete is. While two athletes may jump the same height, one might drop down and rebound very quickly, like a powerful spring, while the other takes longer to develop that force, resulting in a lower mRSI. This provides insight into both the athlete's jump strategy but also fatigue characteristics.
-|    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], displayed as a grey region showing the 25th to 75th percentile. Note that the normative values are gathered from collegiate athletes.
+|    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], displayed as a grey region showing the 25th to 75th percentile. Note that the normative values are gathered from collegiate athletes. The vertical line shows the individual score of `r data$CMJ[data$Athlete == params$Athlete]` cm and an mRSI of `r data$mRSI[data$Athlete == params$Athlete]`.
 
 </p>
 :::
@@ -109,6 +113,7 @@ ggplot(data, mapping = aes(x = AgilityL)) +
             fill = 'grey',
             alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
+  geom_vline(xintercept = data$AgilityL[data$Athlete == params$Athlete]) +
   xlab('Left Start') +
   ylab(element_blank()) +
   theme(axis.text.y = element_blank(),
@@ -122,6 +127,7 @@ ggplot(data, mapping = aes(x = AgilityR)) +
             fill = 'grey',
             alpha = 0.3) +
   geom_density(fill = 'red', alpha = 0.5) +
+  geom_vline(xintercept = data$AgilityR[data$Athlete == params$Athlete]) +
   xlab('Right Start') +
   ylab(element_blank()) +
   theme(axis.text.y = element_blank(),
@@ -133,7 +139,7 @@ ggplot(data, mapping = aes(x = AgilityR)) +
 <p>
 
 |    The 5-10-5 Pro Agility Shuttle is a measure of an athlete's speed and agility. Representing a combination of good change of direction mechanics, balance, and power, a good score on the Pro Agility Shuttle correlates with better performance on the court or field. Additionally, by testing the athlete with both a left and right start, we can see how well an athlete is balanced on both sides.
-|    The above graphs show the distribution of testing scores, alongside normative data from Jay Hoffman's *Norms for Fitness, Performance, and Health*[^2], displayed as a grey region showing the 30th to 70th percentile. Note that the normative values are gathered from collegiate athletes.
+|    The above graphs show the distribution of testing scores, alongside normative data from Jay Hoffman's *Norms for Fitness, Performance, and Health*[^2], displayed as a grey region showing the 30th to 70th percentile. Note that the normative values are gathered from collegiate athletes. The vertical line shows the individual score of `r data$AgilityL[data$Athlete == params$Athlete]`s and  `r data$AgilityR[data$Athlete == params$Athlete]`s.
 
 </p>
 :::
@@ -155,6 +161,7 @@ ggplot(data, mapping = aes(x = AgilityR)) +
 
 ggplot(data, mapping = aes(x = FMS)) +
   geom_histogram(bins = 4, color = 'black', fill = 'red', alpha = 0.5) +
+  geom_histogram(mapping = aes(x = data$FMS[data$Athlete == params$Athlete]), color = 'black', fill = 'grey', alpha = 0.5) +
   xlab('FMS Overhead Squat') +
   theme_classic()
 ```
@@ -162,7 +169,7 @@ ggplot(data, mapping = aes(x = FMS)) +
 ::: {fms-text}
 <p>
 
-|    The Functional Movement Screen™ is a battery of several assessments that look to determine the quality of an athlete's movement patterns. While performing the entire FMS™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. The squat looks at an athlete's ability to reach good depth while maintaining a relatively upright posture, shoulder flexion in keeping the bar overhead, and weight balanced both between the left and right feet and over the middle of the foot. Lastly, research has shown that athletes who score lower on the FMS™ correlate with a higher injury risk in the lower body[^3], so the FMS™ can be used to predict an athlete's risk of injury and make appropriate adjustments.
+|    The Functional Movement Screen™ is a battery of several assessments that look to determine the quality of an athlete's movement patterns. While performing the entire FMS™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. The squat looks at an athlete's ability to reach good depth while maintaining a relatively upright posture, shoulder flexion in keeping the bar overhead, and weight balanced both between the left and right feet and over the middle of the foot. Lastly, research has shown that athletes who score lower on the FMS™ correlate with a higher injury risk in the lower body[^3], so the FMS™ can be used to predict an athlete's risk of injury and make appropriate adjustments. The vertical line shows the individual score of `r data$FMS[data$Athlete == params$Athlete]`.
 
 </p>
 :::
@@ -179,11 +186,8 @@ library(knitr)
 library(vtable)
 library(dplyr)
 library(kableExtra)
-
-sumtable(data, simple.kable = TRUE)
   
-data %>%
-  arrange(by = AthleteLast) %>%
+data[data$Athlete == params$Athlete] %>%
   kable(caption = 'Raw data from testing.', 
         digits = 2, 
         format.args = list(scientific = FALSE))

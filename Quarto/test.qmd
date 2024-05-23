@@ -1,0 +1,9 @@
+---
+title: "test"
+format: pdf
+editor: visual
+params:
+  Athlete: 'NA'
+---
+
+This is for `r params$Athlete`
