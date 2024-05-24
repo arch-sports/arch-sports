@@ -1,0 +1,190 @@
+---
+title: \Huge Pro Skills Basketball Test Results
+title-block-style: plain
+author: \huge Architech Sports and Physical Therapy
+format: 
+  pdf:
+    fig-width: 4
+    fig-height: 2.25
+    fig-pos: h
+    output-file: 'Pro_Skills_Test_Results'
+    output-ext: 'pdf'
+fig-cap-location: bottom
+fig-align: center
+tbl-cap-location: bottom
+margin-top: 1.0in
+margin-left: 0.75in
+editor: visual
+execute: 
+  cache: true
+  echo: false
+  warning: false
+---
+
+![](./Logos/Architech+Sports+Logo.png){fig-align="center" width="514"} ![](./Logos/pro_skills.jpg){fig-align="center"}
+
+{{< pagebreak >}}
+
+# Countermovement Jump Results
+
+```{r}
+#| label: fig-cmj
+#| fig-cap: "Distributions of CMJ results"
+#| fig-subcap:
+#|   - "Countermovement Jump Height, in centimeters"
+#|   - "Reactive Strength Index - Modified, in m/s"
+#|   - 'Functional Movement Screen Scores'
+#| layout-ncol: 2
+
+library(data.table)
+library(ggplot2)
+library(tidyverse)
+data <- read.csv(file = './Data/basketball_random.csv') %>%
+  mutate(CMJ = CMJ*2.54)
+norms_cmj <- read.csv(file = './Data/norms_basketball.csv')
+
+ggplot(data, mapping = aes(x = CMJ)) +
+  geom_rect(xmin = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Countermovement Jump Height') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+ggplot(data, mapping = aes(x = mRSI)) +
+  geom_rect(xmin = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Reactive Strength Index - Modified') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+```
+
+::: {#cmj-text}
+<p>
+
+|    The countermovement jump is an excellent measure of lower body power and explosiveness. Through the use of the Vald ForceDecks, we are able to accurately measure the force an athlete produces over time, which leads to a precise measurement of the athlete's jump height alongside a range of other useful metrics, such as peak power, the duration of different phases of the jump, and the Reactive Strength Index - Modified (mRSI).
+|    One of the more useful metrics gathered from the assessment, the mRSI captures a few important characteristics of the jump into one single measurement. Calculated by dividing the Jump Height by the time to takeoff, the mRSI shows how "springy" an athlete is. While two athletes may jump the same height, one might drop down and rebound very quickly, like a powerful spring, while the other takes longer to develop that force, resulting in a lower mRSI. This provides insight into both the athlete's jump strategy but also fatigue characteristics.
+|    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], displayed as a grey region showing the 25th to 75th percentile. Note that the normative values are gathered from collegiate athletes.
+
+</p>
+:::
+
+[^1]: Normative data from: https://hub.valdperformance.com/app/reports/dataReports
+
+{{< pagebreak >}}
+
+# 5-10-5 Agility Shuttle Results
+
+```{r}
+#| label: fig-agility
+#| fig-cap: 'Distribution of 5-10-5 results'
+#| fig-subcap: 
+#|   - '5-10-5 Agility Shuttle - Left, in seconds'
+#|   - '5-10-5 Agility Shuttle - Right, in seconds'
+#| layout-ncol: 2
+
+norms_agility <- read.csv(file = './Data/norms_agility.csv')
+
+ggplot(data, mapping = aes(x = AgilityL)) +
+  geom_rect(xmin = norms_agility$Time[norms_agility$Percentile == 30],
+            xmax = norms_agility$Time[norms_agility$Percentile == 70],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Left Start') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+ggplot(data, mapping = aes(x = AgilityR)) +
+  geom_rect(xmin = norms_agility$Time[norms_agility$Percentile == 30],
+            xmax = norms_agility$Time[norms_agility$Percentile == 70],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Right Start') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+```
+
+::: {agi-text}
+<p>
+
+|    The 5-10-5 Pro Agility Shuttle is a measure of an athlete's speed and agility. Representing a combination of good change of direction mechanics, balance, and power, a good score on the Pro Agility Shuttle correlates with better performance on the court or field. Additionally, by testing the athlete with both a left and right start, we can see how well an athlete is balanced on both sides.
+|    The above graphs show the distribution of testing scores, alongside normative data from Jay Hoffman's *Norms for Fitness, Performance, and Health*[^2], displayed as a grey region showing the 30th to 70th percentile. Note that the normative values are gathered from collegiate athletes.
+
+</p>
+:::
+
+[^2]: Hoffman, Jay. Norms for Fitness, Performance, and Health. Champaign, IL: Human Kinetics, 2006. Print.
+
+{{< pagebreak >}}
+
+# FMS Overhead Squat
+
+```{r}
+#| label: fig-FMS
+#| fig-cap: 'Count of FMS Overhead Squat Scores'
+#| fig-subcap: 
+#|   - '3: Successful completion of movement.
+#|      2: Completion with modification.
+#|      1: Unsuccessful completion even with modification.
+#|      0: Experienced pain/discomfort during movement.'
+
+ggplot(data, mapping = aes(x = FMS)) +
+  geom_histogram(bins = 4, color = 'black', fill = 'red', alpha = 0.5) +
+  xlab('FMS Overhead Squat') +
+  theme_classic()
+```
+
+::: {fms-text}
+<p>
+
+|    The Functional Movement Screen™ is a battery of several assessments that look to determine the quality of an athlete's movement patterns. While performing the entire FMS™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. The squat looks at an athlete's ability to reach good depth while maintaining a relatively upright posture, shoulder flexion in keeping the bar overhead, and weight balanced both between the left and right feet and over the middle of the foot. Lastly, research has shown that athletes who score lower on the FMS™ correlate with a higher injury risk in the lower body[^3], so the FMS™ can be used to predict an athlete's risk of injury and make appropriate adjustments.
+
+</p>
+:::
+
+[^3]: McMullen J Uhl T A kinetic chain approach for shoulder rehabilitation. Athletic Training. 2000;35:329‐337. as cited in Cook G, Burton L, Hoogenboom BJ, Voight M. Functional movement screening: the use of fundamental movements as an assessment of function - part 1. Int J Sports Phys Ther. 2014 May;9(3):396-409. PMID: 24944860; PMCID: PMC4060319.
+
+{{< pagebreak >}}
+
+# Raw Data
+
+```{r}
+#| output: asis
+library(knitr)
+library(vtable)
+library(dplyr)
+library(kableExtra)
+
+sumtable(data, simple.kable = TRUE)
+  
+data %>%
+  select(Athlete, CMJ, mRSI, AgilityL, AgilityR, FMS) %>%
+  arrange(by = Athlete) %>%
+  kable(caption = 'Raw data from testing.', 
+        digits = 2, 
+        format.args = list(scientific = FALSE),
+        names = FALSE)
+
+
+```
