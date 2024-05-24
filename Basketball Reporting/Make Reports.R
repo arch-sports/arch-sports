@@ -2,6 +2,8 @@ library(quarto)
 library(knitr)
 library(fs)
 
+setwd(getSrcDirectory(function(){})[1])
+
 time <- Sys.time()
 quarto_render('basketball_report.qmd',
               output_format = 'pdf',

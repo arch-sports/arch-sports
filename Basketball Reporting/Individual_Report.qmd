@@ -191,7 +191,7 @@ data[data$Athlete == params$Athlete, ] %>%
   kable(caption = 'Raw data from testing.', 
         digits = 2, 
         format.args = list(scientific = FALSE),
-        col.names = c('Athlete', 'CMJ', 'mRSI', 'Agility Left', 'Agility Right', 'FMS'),
+        col.names = c('Athlete', 'CMJ', 'mRSI', '5-10-5 Left', '5-10-5 Right', 'FMS'),
         row.names = FALSE)
 
 
