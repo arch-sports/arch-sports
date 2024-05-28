@@ -1,5 +1,6 @@
 ---
-title: \Huge Pro Skills Basketball Test Results
+title: \Huge Pro Skills Basketball
+subtitle: \huge `r gsub("_", "/", params$Team)`
 title-block-style: plain
 author: \huge Architech Sports and Physical Therapy
 format: 
@@ -7,7 +8,7 @@ format:
     fig-width: 4
     fig-height: 2.25
     fig-pos: h
-    output-file: 'Pro_Skills_Test_Results'
+    output-file: '`r gsub("_", "/", params$Team)`'
     output-ext: 'pdf'
 fig-cap-location: bottom
 fig-align: center
@@ -15,10 +16,13 @@ tbl-cap-location: bottom
 margin-top: 1.0in
 margin-left: 0.75in
 editor: visual
+params:
+  Team: 'NA'
 execute: 
-  cache: true
+  cache: false
   echo: false
   warning: false
+  error: false
 ---
 
 ![](./Logos/Architech+Sports+Logo.png){fig-align="center" width="514"} ![](./Logos/pro_skills.jpg){fig-align="center"}
@@ -33,14 +37,16 @@ execute:
 #| fig-subcap:
 #|   - "Countermovement Jump Height, in centimeters"
 #|   - "Reactive Strength Index - Modified, in m/s"
-#|   - 'Functional Movement Screen Scores'
 #| layout-ncol: 2
 
 library(data.table)
 library(ggplot2)
 library(tidyverse)
 data <- read.csv(file = './Data/basketball_random.csv') %>%
-  mutate(CMJ = CMJ*2.54)
+  mutate(CMJ = CMJ*2.54, Team = gsub('/', '_', Team))
+
+data <- data[data$Team == params$Team, ]
+
 norms_cmj <- read.csv(file = './Data/norms_basketball.csv')
 
 ggplot(data, mapping = aes(x = CMJ)) +
@@ -150,7 +156,7 @@ ggplot(data, mapping = aes(x = AgilityR)) +
 #|      0: Experienced pain/discomfort during movement.'
 
 ggplot(data, mapping = aes(x = FMS)) +
-  geom_histogram(bins = 4, color = 'black', fill = 'red', alpha = 0.5) +
+  geom_histogram(bins = length(unique(data$FMS)), color = 'black', fill = 'red', alpha = 0.5) +
   xlab('FMS Overhead Squat') +
   theme_classic()
 ```
@@ -176,7 +182,7 @@ library(vtable)
 library(dplyr)
 library(kableExtra)
 
-sumtable(data, simple.kable = TRUE)
+sumtable(select(data, Athlete, CMJ, mRSI, AgilityL, AgilityR, FMS, -Team), simple.kable = TRUE)
   
 data %>%
   select(Athlete, CMJ, mRSI, AgilityL, AgilityR, FMS) %>%
