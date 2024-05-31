@@ -1,6 +1,5 @@
 ---
 title: \Huge `r params$Athlete`
-subtitle: \huge `r gsub("_", "/", params$Team)`
 title-block-style: plain
 author: \huge Architech Sports and Physical Therapy
 format: 
@@ -25,8 +24,8 @@ execute:
   warning: false
   error: false
 ---
-![](./Logos/Architech+Sports+Logo.png){fig-align="center" width="514"} ![](./Logos/pro_skills.jpg){fig-align="center"}
-{{< pagebreak >}}
+
+![](./Logos/Architech+Sports+Logo.png){fig-align="center" width="514"} ![](./Logos/pro_skills.jpg){fig-align="center"} {{< pagebreak >}}
 
 ```{r}
 #setwd(getSrcDirectory(function(){}))
@@ -104,6 +103,3 @@ data[data$Athlete == params$Athlete, ] %>%
 :::
 
 [^1]: Normative data from: https://hub.valdperformance.com/app/reports/dataReports
-
-
-
