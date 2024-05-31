@@ -5,37 +5,33 @@ library(dplyr)
 
 setwd(getSrcDirectory(function(){})[1])
 
-data <- read.csv(file = './Data/basketball_random.csv') %>% mutate(Team = gsub('/', '_', Team))
+data <- read.csv(file = './Data/pro_skills_testing.csv') %>%
+  mutate(Athlete = paste(First, Last, sep = " "))
 
-teams <- unique(data$Team)
-
+quarto_render('basketball_report.qmd',
+            output_format = 'pdf',
+            output_file = 'Pro Skills Basketball.pdf'
+            )
 
 time <- Sys.time()
 
-for (team in teams) {
-  print(paste('Making report for', team, sep = " "))
-  dir.create(paste('./Reports/', team, sep = ''), showWarnings = FALSE)
-  dir.create(paste('./Reports/', team, '/Individual Reports', sep = ''), showWarnings = FALSE)
+
+dir.create('./Reports/', showWarnings = FALSE)
+dir.create('./Reports/Individual Reports', showWarnings = FALSE)
+
+athletes <- data$Athlete[!is.na(data$jump_height)]
+
+file_move('Pro Skills Basketball.pdf', './Reports/Pro Skills Basketball.pdf')
+
+for (athlete in athletes) {
+  print(paste('Making report for', athlete, sep = " "))
   
-  athletes <- data$Athlete[data$Team == team]
-  
-  quarto_render('basketball_report.qmd',
+  quarto_render('Individual_Report.qmd',
               output_format = 'pdf',
-              output_file = paste(team, '.pdf', sep = ''),
-              execute_params = list(Team = team))
-  
-  file_move(paste(team, '.pdf', sep = ''), paste('./Reports/', team, '/', team, '.pdf', sep = ''))
-  
-  for (athlete in athletes) {
-    print(paste('Making report for', athlete, sep = " "))
-    
-    quarto_render('Individual_Report.qmd',
-                output_format = 'pdf',
-                output_file = paste(team, '_', athlete, '.pdf', sep = ""),
-                execute_params = list(Athlete = athlete, Team = team))
-  
-    file_move(paste(team, '_', athlete, '.pdf', sep = ""), paste('./Reports/', team, '/Individual Reports/', team, '_', athlete, '.pdf', sep = ""))
-  }
+              output_file = paste(athlete, '.pdf', sep = ""),
+              execute_params = list(Athlete = athlete))
+
+  file_move(paste(athlete, '.pdf', sep = ""), paste('./Reports/Individual Reports/', athlete, '.pdf', sep = ""))
 }
 
 

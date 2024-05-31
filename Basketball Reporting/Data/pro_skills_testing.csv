@@ -1,0 +1,58 @@
+"Last","First","Team","jump_height","rsi","ecc_mean_force_assym","ecc_mean_assym_side","con_mean_force_assym","con_mean_force_assym_side","peak_assym","peak_assym_side","pain","event","gator","calf","lat","quad"
+"Berry","Jovon Nasir","CLT 2025 Elite Barnes/Goodrum",16.1,0.37,0.086,"Right",0.102,"Right",0.136,"Right","Y","ACL","N","Y","N","N"
+"Block","Ryder","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Crumes","Myles","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Demby","Bryson","CLT 2025 Elite Barnes/Goodrum",11.4,0.26,0.079,"Left",0.119,"Left",0.075,"Left","Y","Right Ankle","Y","Y","Y","N"
+"Early","Bram","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Ericson","Nolan","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Jones","James","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Jordan","Kevin","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Leuthardt","Dylan","CLT 2025 Elite Barnes/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Smith III","Isaiah","CLT 2025 Elite Barnes/Goodrum",10.6,0.21,0.119,"Right",0.108,"Right",0.163,"Right","N",NA,"N","Y","N","Y"
+"Bryan-Wynens","Alex","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Hayes","Miles","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Mciver","James","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Munters","Ashton","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Nygren","Jack","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Palmer","Peyton","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Smith","Charles","CLT 2025 Elite Gravely",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Walker","Connor","CLT 2025 Elite Gravely",15.4,0.53,0.151,"Left",0.027,"Left",0.133,"Right","Y","Ankles","N","Y","Y","N"
+"Warren","Jacob","CLT 2025 Elite Gravely",17.2,0.5,0.036,"Right",0.063,"Left",0.305,"Left","Y","Ankle","Y","N","N","Y"
+"James","Trevor","CLT 2026 Elite Rowe/Goodrum",15.6,0.38,0.097,"Right",0.08,"Right",0.182,"Right","N",NA,"N","N","N","N"
+"Jones","Evan","CLT 2026 Elite Rowe/Goodrum",17.4,0.46,0.182,"Right",0.006,"Right",0.269,"Right","N",NA,"N","Y","Y","Y"
+"Lieberman","Saul","CLT 2026 Elite Rowe/Goodrum",16.7,0.5,0.013,"Left",0.025,"Left",0.113,"Left","Y","Back: L2/L3 Missed season","Y","N","N","Y"
+"Neubauer","Jimmy","CLT 2026 Elite Rowe/Goodrum",15.2,0.45,0.097,"Right",0.01,"Left",0.017,"Right","N",NA,"N","Y","N","Y"
+"Papazis","Thanasi","CLT 2026 Elite Rowe/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Patterson","Gray","CLT 2026 Elite Rowe/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Ramirez","Ian","CLT 2026 Elite Rowe/Goodrum",13.3,0.4,0.121,"Right",0.7,"Left",0.29,"Right","N",NA,"N","Y","Y","N"
+"Sacco","Connor","CLT 2026 Elite Rowe/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Warren","Ethan","CLT 2026 Elite Rowe/Goodrum",15,0.45,0.136,"Right",0.071,"Right",0.126,"Right","N",NA,"N","N","Y","Y"
+"Watts","Ashantis","CLT 2026 Elite Rowe/Goodrum",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Boswell","Jermiah","CLT 2026 Regional Baldwin",16.9,0.56,0.092,"Right",0.038,"Right",0.093,"Right","Y","Ankle","N","Y","Y","N"
+"Dave","Shlok","CLT 2026 Regional Baldwin",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Hall","Canyon","CLT 2026 Regional Baldwin",16.3,0.55,0.009,"Right",0.001,"Left",0.062,"Left","Y","Achilles/Ankle","Y","N","N","Y"
+"Hatcher","Alex","CLT 2026 Regional Baldwin",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Ide","Ko","CLT 2026 Regional Baldwin",15,0.41,0.037,"Right",0.024,"Right",0.288,"Right","N",NA,"N","N","N","Y"
+"Martin","Jaxson","CLT 2026 Regional Baldwin",10.5,0.44,0.045,"Right",0.09,"Right",0.21,"Left","N",NA,"N","Y","Y","Y"
+"McCrea","Jayden","CLT 2026 Regional Baldwin",17.1,0.65,0.097,"Right",0.096,"Right",0.087,"Left","N",NA,"N","Y","N","N"
+"Nanduri","Nikhil","CLT 2026 Regional Baldwin",13.7,0.42,0.093,"Right",0.074,"Left",0.221,"Right","N",NA,"Y","N","N","Y"
+"Ober","Maxwell","CLT 2026 Regional Baldwin",14.4,0.37,0.039,"Left",0.085,"Right",0.057,"Right","N",NA,"N","Y","Y","N"
+"Stanley","Reid","CLT 2026 Regional Baldwin",16.8,0.53,0.029,"Right",0.049,"Left",0.227,"Left","Y","Ankle Sprain","Y","Y","Y","Y"
+"Warren","Grant","CLT 2026 Regional Baldwin",14.8,0.44,0.025,"Right",0.106,"Left",0.09,"Right","N",NA,NA,"Y","N",NA
+"Claire","Tommy","CLT 2027 Elite Leaphart",14.8,0.35,0.022,"Left",0.02,"Left",0.048,"Left","N",NA,"Y","N","N","N"
+"Dillon","Cooper","CLT 2027 Elite Leaphart",11.9,0.37,0.073,"Right",0,"Right",0.233,"Right","N",NA,"N","Y","Y","Y"
+"Garrison","Henry","CLT 2027 Elite Leaphart",NA,NA,NA,NA,NA,NA,NA,NA,"Y","Jumper's Knee","Y","Y","N","N"
+"Harley","Daniel","CLT 2027 Elite Leaphart",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Harris","Carrington","CLT 2027 Elite Leaphart",NA,NA,NA,NA,NA,NA,NA,NA,"N",NA,"Y","Y","Y","N"
+"Kincaid","Braven","CLT 2027 Elite Leaphart",11.4,0.42,0.358,"Left",0.043,"Left",0.088,"Left","Y","Ankle Fracture","N","Y","Y","N"
+"Massenberg","Logan","CLT 2027 Elite Leaphart",15,0.4,0.18,"Left",0.176,"Left",0.318,"Left","Y","Ankle","N","Y","N","Y"
+"Pietrafesa","Jacob","CLT 2027 Elite Leaphart",NA,NA,NA,NA,NA,NA,NA,NA,"N",NA,"N","Y","N","N"
+"Anderson","Parker","CLT 2027 Regional Dozier",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Hornes","Kaidyn","CLT 2027 Regional Dozier",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Ivanov","Dmitriy","CLT 2027 Regional Dozier",13.4,0.42,0.236,"Left",0.102,"Left",0.25,"Left","Y","Knee Pain/Back Pain","N","Y","N","Y"
+"Keady","Nolan","CLT 2027 Regional Dozier",12.2,0.37,0.001,"Right",0.056,"Right",0.051,"Left","Y","Knee Pain","N","Y","N","Y"
+"McCain","KaiRee","CLT 2027 Regional Dozier",12.3,0.31,0.068,"Right",0.122,"Left",0.177,"Right","N",NA,"N","Y","Y","N"
+"Selden","Dylan","CLT 2027 Regional Dozier",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"Stassenko","Maxim","CLT 2027 Regional Dozier",16.7,0.3,0.046,"Right",0.032,"Right",0.06,"Left","Y","Ankle: Missed several weeks","N","N","N","Y"
+"Tyree-Rodriguez","Addison","CLT 2027 Regional Dozier",11,0.36,0.169,"Right",0.084,"Right",0.17,"Right","N",NA,NA,"Y","Y",NA
+"Robinson","Latterio",NA,11.8,0.48,0.107,"Right",0.064,"Left",0.189,"Left","N",NA,"N","Y","Y","Y"
