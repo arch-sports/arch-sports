@@ -82,11 +82,12 @@ ggplot(data, mapping = aes(x = rsi)) +
 
 ```{r}
 data[data$Athlete == params$Athlete, ] %>%
-  select(Athlete, jump_height, rsi, gator, calf, lat) %>%
+  select(Athlete, jump_height, rsi, gator, calf, lat, quad, pain) %>%
+  arrange(by = Athlete) %>%
   kable(caption = 'Raw data from testing.', 
         digits = 2, 
         format.args = list(scientific = FALSE),
-        col.names = c('Athlete', 'CMJ', 'mRSI', 'Gator Plank', 'FMS Squat - Calf', 'FMS Squat - Lat'),
+        col.names = c('Athlete', 'CMJ', 'mRSI', 'Hip Weakness', 'Calf', 'Lat', 'Quad Tightness', 'Pain History'),
         row.names = FALSE)
 
 ```
