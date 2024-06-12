@@ -82,14 +82,21 @@ ggplot(data, mapping = aes(x = rsi)) +
 
 ```{r}
 data[data$Athlete == params$Athlete, ] %>%
-  select(Athlete, jump_height, rsi, gator, calf, lat, quad, pain) %>%
-  arrange(by = Athlete) %>%
+  select(jump_height, rsi, ecc_mean_force_assym, con_mean_force_assym, peak_assym,  calf, lat, quad, gator, pain) %>%
   kable(caption = 'Raw data from testing.', 
         digits = 2, 
         format.args = list(scientific = FALSE),
-        col.names = c('Athlete', 'CMJ', 'mRSI', 'Hip Weakness', 'Calf', 'Lat', 'Quad Tightness', 'Pain History'),
-        row.names = FALSE)
-
+        col.names = c('CMJ', 'mRSI', 'Ecc.', 'Con.', 'Landing', 'Calf', 'Lat', 'Quad', 'Hip Weakness', 'Pain History'),
+        row.names = FALSE) %>%
+  add_header_above(
+    c('',
+      '',
+      'Assymetries' = 3,
+      'Tightness' = 3,
+      '',
+      ''),
+    underline = FALSE,
+    bold = TRUE)
 ```
 
 ::: {#cmj-text}
@@ -97,6 +104,7 @@ data[data$Athlete == params$Athlete, ] %>%
 
 |    The countermovement jump is an excellent measure of lower body power and explosiveness. Alongside the jump height, one of the more useful metrics gathered from the assessment, the mRSI captures a few important characteristics of the jump into one single measurement, showing how "springy" an athlete is. While two athletes may jump the same height, one might drop down and rebound very quickly, while the other takes longer to develop that force, resulting in a lower mRSI.
 |    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], showing the 25th to 75th percentiles. Note that the normative values are gathered from collegiate athletes. The vertical line shows the individual scores.
+|    The assymetries measure the difference between sides for the eccentric (lowering), concentric(raising), and landing portions of the jump.
 |    The Gator Plank Hip Strength assessment is used to evaluate the relative strength of an athlete in the frontal plane. Being strong enough to support one's bodyweight in the side plank position should correlate with a reduced rate of injury in athletes. If the athlete was marked as "Yes," then they were able to successfully perform the assessment.
 |    While performing the entire Functional Movement Screen™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. During this assessment, we looked at whether tightness in the calves and/or lats were the limiting factor. A 'Yes' indicates tightness in that particular area.
 
