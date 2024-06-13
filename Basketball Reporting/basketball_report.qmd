@@ -195,12 +195,12 @@ kable(t_output_all,
     )
 
 data_filter <- data[data$ecc_mean_force_assym > 0.10, ]
-total <- length(data_filter$jump_height)
-quad_count <- length(which(data_filter$quad == 'N'))
-hip_count <- length(which(data_filter$gator == 'N'))
-lat_count <- length(which(data_filter$lat == 'Y'))
-calf_count <- length(which(data_filter$calf == 'Y'))
-pain_count <- length(which(data_filter$pain == 'Y'))
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
 
 output_filter <- data.frame(
   header = c('', 'Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
@@ -212,23 +212,14 @@ output_filter <- data.frame(
 )
 
 t_output_filter_ecc <- t(output_filter)
-# kable_ecc <- kable(t_output_filter,
-#       caption = 'Athletes with Ecc. Assym. >10%',
-#       row.names = FALSE,
-#       col.names = c('', 'Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
-#       format = 'html',
-#       align = 'lcc',
-#       valign = 't'
-#     )
-
 
 data_filter <- data[data$con_mean_force_assym > 0.10, ]
-total <- length(data_filter$jump_height)
-quad_count <- length(which(data_filter$quad == 'N'))
-hip_count <- length(which(data_filter$gator == 'N'))
-lat_count <- length(which(data_filter$lat == 'Y'))
-calf_count <- length(which(data_filter$calf == 'Y'))
-pain_count <- length(which(data_filter$pain == 'Y'))
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
 
 output_filter <- data.frame(
   header = c('Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
@@ -240,22 +231,15 @@ output_filter <- data.frame(
 )
 
 t_output_filter_con <- t(output_filter)
-# kable_con <- kable(t_output_filter,
-#       caption = 'Athletes with Con. Assym. >10%',
-#       row.names = FALSE,
-#       col.names = c('', 'Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
-#       format = 'html',
-#       align = 'lcc',
-#       valign = 't'
-#     )
+
 
 data_filter <- data[data$peak_assym > 0.10, ]
-total <- length(data_filter$jump_height)
-quad_count <- length(which(data_filter$quad == 'N'))
-hip_count <- length(which(data_filter$gator == 'N'))
-lat_count <- length(which(data_filter$lat == 'Y'))
-calf_count <- length(which(data_filter$calf == 'Y'))
-pain_count <- length(which(data_filter$pain == 'Y'))
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
 
 output_filter <- data.frame(
   header = c('Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
@@ -267,20 +251,12 @@ output_filter <- data.frame(
 )
 
 t_output_filter_land <- t(output_filter)
-# kable_land <- kable(t_output_filter,
-#       caption = 'Athletes with Landing Assym. >10%',
-#       row.names = FALSE,
-#       col.names = c('', 'Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
-#       format = 'html',
-#       align = 'lcc',
-#       valign = 't'
-#     )
+
 
 t_output_full <- cbind(t_output_filter_ecc, t_output_filter_con, t_output_filter_land)
 kable(t_output_full,
       caption = 'Athletes by Assymetries',
       row.names = FALSE,
-      col.names = NULL,
       align = 'lcccccc'
     ) %>%
 add_header_above(
@@ -291,7 +267,37 @@ add_header_above(
       underline = FALSE,
       bold = TRUE)
 
+data_filter <- data[data$pain == 'Y',]
+pain_counts <- data.frame(
+  total = c(length(data_filter$jump_height)),
+  hip = c(length(which(data_filter$gator == 'N'))),
+  quad = c(length(which(data_filter$quad == 'Y'))),
+  lat = c(length(which(data_filter$lat == 'Y'))),
+  calf = c(length(which(data_filter$calf == 'Y'))),
+  ecc = c(length(which(data_filter$ecc_mean_force_assym >= 0.1))),
+  con = c(length(which(data_filter$con_mean_force_assym >= 0.1))),
+  land = c(length(which(data_filter$peak_assym >= 0.1)))
+)
 
+kable(pain_counts,
+      caption = 'Athletes with Aches and Pains',
+      row.names = FALSE,
+      col.names = c('Total',
+                    'Hip',
+                    'Quad',
+                    'Lat',
+                    'Calf',
+                    'Ecc.',
+                    'Con.',
+                    'Landing'),
+      align = 'c'
+      ) %>%
+  add_header_above(
+    c('',
+      '',
+      'Tightness' = 3,
+      'Assymetries' = 3)
+  )
 
 ```
 

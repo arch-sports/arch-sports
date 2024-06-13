@@ -100,52 +100,16 @@ data[data$Athlete == params$Athlete, ] %>%
     bold = TRUE)
 ```
 
-```{r}
-athlete_col <- data[data$Athlete == params$Athlete, ] %>%
-  mutate(assym = (ecc_mean_force_assym >= 0.1 || con_mean_force_assym >= 0.1 || peak_assym >= 0.1), calf = (calf == 'Y'), lat = (lat == 'Y'), quad = (quad == 'Y'), gator = (gator == 'N')) %>%
-  select(assym, calf, lat, quad, gator) %>%
-  t()
+::: {#cmj-text}
+<p>
 
-recommend <- c(
-  assym = 'Unliateral strength training, including:\n
-                \t-Lunges\n\t
-                \t-Split Squats\n\t
-            Technical Plyometric Drills, including:\n
-                \t-Snap Downs\n\t
-                \t-SL Hop and Stick',
-  calf = 'Calf Stretches, including:\n
-      \t-Wall Ankle Dorsiflexion\n
-      \t-1/2 Kneeling Calf Stretch',
-  lat = 'Lat Stretches, including:\n
-      \t-Prayer Stretch\n
-      \t-Dead Hangs\n
-      \t-Wall/Floor Angels',
-  quad = 'Quad Stretches, including:\n
-      \t-Standing Quad Pull\n
-      \t-Hurdler Stretch\n
-      \t-Couch Stretch',
-  hip = 'Hip Adduction/Abuction, including:\n
-      \t-Lying Side Leg Raise\n
-      \t-Side Plank\n
-      \t-Gator Plank\n
-      \t-Copenhagen Plank'
-)
+|    The countermovement jump is an excellent measure of lower body power and explosiveness. Alongside the jump height, one of the more useful metrics gathered from the assessment, the mRSI captures a few important characteristics of the jump into one single measurement, showing how "springy" an athlete is. While two athletes may jump the same height, one might drop down and rebound very quickly, while the other takes longer to develop that force, resulting in a lower mRSI.
+|    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], showing the 25th to 75th percentiles. Note that the normative values are gathered from collegiate athletes. The vertical line shows the individual scores.
+|    The assymetries measure the difference between sides for the eccentric (lowering), concentric(raising), and landing portions of the jump.
+|    The Gator Plank Hip Strength assessment is used to evaluate the relative strength of an athlete in the frontal plane. Being strong enough to support one's bodyweight in the side plank position should correlate with a reduced rate of injury in athletes. If the athlete was marked as "Yes," then they were able to successfully perform the assessment.
+|    While performing the entire Functional Movement Screen™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. During this assessment, we looked at whether tightness in the calves and/or lats were the limiting factor. A 'Yes' indicates tightness in that particular area.
 
+</p>
+:::
 
-output <- data.frame(
-  Type = c('High Assymetry', 'Calf Tightness', 'Lat Tightness', 'Quad Tightness', 'Hip Weakness'),
-  Results = athlete_col,
-  Recommend = recommend
-)
-colnames(output) <- c('Type', 'Results', 'Recommend')
-
-output_final <- output[output$Results,] %>% select(Type, Recommend)
-
-kable(
-  output_final,
-  col.names = c('Results', 'Recommendation'),
-  row.names = FALSE
-) %>%
-  column_spec(column = 2, width = '31em')
-
-```
+[^1]: Normative data from: https://hub.valdperformance.com/app/reports/dataReports
