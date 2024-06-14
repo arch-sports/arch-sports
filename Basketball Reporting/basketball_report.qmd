@@ -151,6 +151,7 @@ ggplot(data, mapping = aes(x = lat)) +
 {{< pagebreak >}}
 
 # Counts of Athletes
+
 ```{r}
 #| label: table-count
 #| layout-ncol: 1
@@ -300,7 +301,6 @@ kable(pain_counts,
   )
 
 ```
-
 
 {{< pagebreak >}}
 

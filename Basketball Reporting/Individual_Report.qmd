@@ -7,8 +7,11 @@ format:
     fig-width: 4
     fig-height: 2.25
     fig-pos: h
+
     output-file: '`r paste(gsub("_", "/", params$Team), "_", params$Athlete, sep = "")`'
     output-ext: 'pdf'
+preserve-tabs: true
+tab-stop: 4
 fig-cap-location: bottom
 fig-align: center
 tbl-cap-location: top
@@ -31,7 +34,7 @@ execute:
 #setwd(getSrcDirectory(function(){}))
 ```
 
-# Test Results
+## Test Results
 
 ```{r}
 #| label: fig-cmj
@@ -100,52 +103,94 @@ data[data$Athlete == params$Athlete, ] %>%
     bold = TRUE)
 ```
 
+## Recommendations
+
 ```{r}
 athlete_col <- data[data$Athlete == params$Athlete, ] %>%
   mutate(assym = (ecc_mean_force_assym >= 0.1 || con_mean_force_assym >= 0.1 || peak_assym >= 0.1), calf = (calf == 'Y'), lat = (lat == 'Y'), quad = (quad == 'Y'), gator = (gator == 'N')) %>%
   select(assym, calf, lat, quad, gator) %>%
   t()
 
+
+
 recommend <- c(
-  assym = 'Unliateral strength training, including:\n
-                \t-Lunges\n\t
-                \t-Split Squats\n\t
-            Technical Plyometric Drills, including:\n
-                \t-Snap Downs\n\t
-                \t-SL Hop and Stick',
-  calf = 'Calf Stretches, including:\n
-      \t-Wall Ankle Dorsiflexion\n
-      \t-1/2 Kneeling Calf Stretch',
-  lat = 'Lat Stretches, including:\n
-      \t-Prayer Stretch\n
-      \t-Dead Hangs\n
-      \t-Wall/Floor Angels',
-  quad = 'Quad Stretches, including:\n
-      \t-Standing Quad Pull\n
-      \t-Hurdler Stretch\n
-      \t-Couch Stretch',
-  hip = 'Hip Adduction/Abuction, including:\n
-      \t-Lying Side Leg Raise\n
-      \t-Side Plank\n
-      \t-Gator Plank\n
-      \t-Copenhagen Plank'
+  assym1 = 'Unilateral Strength Training, including:',
+  assym2 = '-Lunges',
+  assym3 = '-Split Squats',
+  assym4 = 'Technical Plyometric Drills, including:',
+  assym5 = '-Snap Downs',
+  assym6 = '-Hop and Stick',
+  
+  calf1 = 'Calf Stretches, including:',
+  calf2 = '-Wall Ankle Dorsiflexion',
+  calf3 = '-1/2 Kneeling Calf Stretch',
+  
+  lat1 = 'Lat Stretches, including:',
+  lat2 = '-Prayer Stretch',
+  lat3 = '-Dead Hangs',
+  lat4 = '-Wall/Floor Angels',
+  
+  quad1 = 'Quad Stretches, including:',
+  quad2 = '-Standing Quad Pull',
+  quad3 = '-Hurdler Stretch',
+  quad4 = '-Couch Stretch',
+  
+  hip1 = 'Hip Abduction, including:',
+  hip2 = '-Lying Side Leg Raise',
+  hip3 = '-Side Plank',
+  hip4 = '-Gator Plank'
 )
 
+type <- c('High Assymetry', 
+           'High Assymetry',
+           'High Assymetry',
+           'High Assymetry',
+           'High Assymetry',
+           'High Assymetry',
+           'Calf Tightness', 
+           'Calf Tightness',
+           'Calf Tightness',
+           'Lat Tightness', 
+           'Lat Tightness',
+           'Lat Tightness',
+           'Lat Tightness',
+           'Quad Tightness', 
+           'Quad Tightness',
+           'Quad Tightness',
+           'Quad Tightness',
+           'Hip Weakness',
+           'Hip Weakness',
+           'Hip Weakness',
+           'Hip Weakness')
 
 output <- data.frame(
-  Type = c('High Assymetry', 'Calf Tightness', 'Lat Tightness', 'Quad Tightness', 'Hip Weakness'),
-  Results = athlete_col,
+  Type = type,
   Recommend = recommend
 )
-colnames(output) <- c('Type', 'Results', 'Recommend')
 
-output_final <- output[output$Results,] %>% select(Type, Recommend)
+for(row in 1:nrow(output)){
+  output$Result[row] <- switch(output$Type[row],
+                               "High Assymetry" = athlete_col['assym',],
+                               'Calf Tightness' = athlete_col['calf',],
+                               'Lat Tightness' = athlete_col['lat',],
+                               'Quad Tightness' = athlete_col['quad',],
+                               'Hip Weakness' = athlete_col['gator',])
+}
 
-kable(
-  output_final,
-  col.names = c('Results', 'Recommendation'),
-  row.names = FALSE
-) %>%
-  column_spec(column = 2, width = '31em')
+#colnames(output) <- c('Type', 'Results', 'Recommend')
+
+output_final <- output[output$Result,] %>% select(Type, Recommend)
+
+kable(output_final$Recommend,
+      col.names = c('Recommendation'),
+      row.names = FALSE,
+      escape = FALSE
+    ) %>%
+  pack_rows(index = table(fct_inorder(output_final$Type))) %>%
+  #kable_styling(latex)
+  #add_indent(positions = 1:nrow(output_final), all_cols = FALSE, target_cols = 2) %>%
+  column_spec(column = 2, width = '70em')
 
 ```
+
+
