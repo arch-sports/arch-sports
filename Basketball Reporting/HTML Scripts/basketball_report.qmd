@@ -1,0 +1,329 @@
+---
+title: \Huge Pro Skills Basketball
+title-block-style: plain
+author: \huge Architech Sports and Physical Therapy
+format: 
+  html:
+    fig-width: 4
+    fig-height: 2.25
+    fig-pos: h
+    embed-resources: true
+    output-file: 'Pro Skills Basketball'
+    output-ext: 'html'
+fig-cap-location: bottom
+fig-align: center
+tbl-cap-location: bottom
+margin-top: 1.0in
+margin-left: 0.75in
+editor: visual
+execute: 
+  cache: false
+  echo: false
+  warning: false
+  error: false
+---
+
+![](../Logos/Architech+Sports+Logo.png){fig-align="center" width="514"} ![](../Logos/pro_skills.jpg){fig-align="center"}
+
+{{< pagebreak >}}
+
+# Countermovement Jump Results
+
+```{r}
+#| label: fig-cmj
+#| fig-cap: "Distributions of CMJ results"
+#| fig-subcap:
+#|   - "Countermovement Jump Height, in centimeters"
+#|   - "Reactive Strength Index - Modified, in m/s"
+#| layout-ncol: 2
+
+library(data.table)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(knitr)
+library(vtable)
+library(dplyr)
+library(kableExtra)
+
+data <- read.csv(file = '../Data/pro_skills_testing.csv') %>%
+  mutate(jump_height = jump_height*2.54, Team = gsub('/', '_', Team), Athlete = paste(First, Last, sep = " "))
+data <- data[!is.na(data$jump_height),]
+
+norms_cmj <- read.csv(file = '../Data/norms_basketball.csv')
+
+ggplot(data, mapping = aes(x = jump_height)) +
+  geom_rect(xmin = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$'Jump.Height..cm.'[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Countermovement Jump Height') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+ggplot(data, mapping = aes(x = rsi)) +
+  geom_rect(xmin = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$"Modified.RSI..m.s."[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Reactive Strength Index - Modified') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+
+```
+
+::: {#cmj-text}
+<p>
+
+|    The countermovement jump is an excellent measure of lower body power and explosiveness. Through the use of the Vald ForceDecks, we are able to accurately measure the force an athlete produces over time, which leads to a precise measurement of the athlete's jump height alongside a range of other useful metrics, such as peak power, the duration of different phases of the jump, and the Reactive Strength Index - Modified (mRSI).
+|    One of the more useful metrics gathered from the assessment, the mRSI captures a few important characteristics of the jump into one single measurement. Calculated by dividing the Jump Height by the time to takeoff, the mRSI shows how "springy" an athlete is. While two athletes may jump the same height, one might drop down and rebound very quickly, like a powerful spring, while the other takes longer to develop that force, resulting in a lower mRSI. This provides insight into both the athlete's jump strategy but also fatigue characteristics.
+|    The above graphs show the distribution of testing scores, alongside normative data from the VALD *Normative Data Report - Basketball 2022*[^1], displayed as a grey region showing the 25th to 75th percentile. Note that the normative values are gathered from collegiate athletes.
+
+</p>
+:::
+
+[^1]: Normative data from: https://hub.valdperformance.com/app/reports/dataReports
+
+{{< pagebreak >}}
+
+# Gator Plank
+
+```{r}
+#| label: fig-agility
+#| fig-cap: 'Distribution of Gator Plank Results'
+#| fig-subcap: 
+#|   - 'Count of Athletes'
+#| layout-ncol: 1
+
+ggplot(data, mapping = aes(x = gator)) + 
+  geom_histogram(stat = 'count', color = 'black', fill = 'red', alpha = 0.5) +
+  xlab('Gator Plank Hip Strength Assessment') +
+  theme_classic()
+
+```
+
+::: {agi-text}
+<p>
+
+|    The Gator Plank Hip Strength assessment is a test used to evaluate the relative hip strength of an athlete in the frontal plane. Being strong enough to support one's bodyweight in the side plank position shows healthy muscular development, which should correlate with a reduced rate of injury in athletes. If the athlete was marked as "Yes," then they were able to successfully perform the assessment.
+
+</p>
+:::
+
+{{< pagebreak >}}
+
+# FMS Overhead Squat
+
+```{r}
+#| label: fig-FMS
+#| fig-cap: 'Count of Athletes by FMS Squat Results'
+#| fig-subcap: 
+#|   - 'Calf tightness as shown by Overhead Squat'
+#|   - 'Lat tightness as shown by Overhead Squat'
+#| layout-ncol: 2
+
+ggplot(data, mapping = aes(x = calf)) +
+  geom_histogram(color = 'black', fill = 'red', alpha = 0.5, stat = 'count') +
+  xlab('FMS Overhead Squat Calf Tightness') +
+  theme_classic()
+
+ggplot(data, mapping = aes(x = lat)) +
+  geom_histogram(color = 'black', fill = 'red', alpha = 0.5, stat = 'count') +
+  xlab('FMS Overhead Squat Lat Tightness') +
+  theme_classic()
+```
+
+::: {fms-text}
+<p>
+
+|    The Functional Movement Screen™ is a battery of several assessments that look to determine the quality of an athlete's movement patterns. While performing the entire FMS™ screen gives a more comprehensive look into an athlete's movement, the overhead squat, as a single assessment, provides a holistic look into the entire body as an entire system working together. The squat looks at an athlete's ability to reach good depth while maintaining a relatively upright posture, shoulder flexion in keeping the bar overhead, and weight balanced both between the left and right feet and over the middle of the foot. This allows the practitioner to assess the athlete's movement capabilities across the whole body at once. During this assessment, we looked at whether tightness in the calves and/or lats were the limiting factor. A 'Yes' indicates tightness in that particular area.
+
+</p>
+:::
+
+{{< pagebreak >}}
+
+# Counts of Athletes
+
+```{r}
+#| label: table-count
+#| layout-ncol: 1
+#| layout-nrow: 4
+
+total <- length(data$jump_height)
+quad_count <- length(which(data$quad == 'N'))
+hip_count <- length(which(data$gator == 'N'))
+lat_count <- length(which(data$lat == 'Y'))
+calf_count <- length(which(data$calf == 'Y'))
+
+low_ecc_count <- length(data$ecc_mean_force_assym[between(data$ecc_mean_force_assym, 0.05, 0.1)])
+high_ecc_count <- length(data$ecc_mean_force_assym[data$ecc_mean_force_assym >= 0.10])
+
+low_con_count <- length(data$con_mean_force_assym[between(data$con_mean_force_assym, 0.05, 0.1)])
+high_con_count <- length(data$con_mean_force_assym[data$con_mean_force_assym >= 0.10])
+
+low_land_count <- length(data$peak_assym[between(data$peak_assym, 0.05, 0.10)])
+high_land_count <- length(data$peak_assym[data$peak_assym >= 0.10])
+
+output_all <- data.frame(
+  quad = c('Quad Tightness', quad_count, round(quad_count/total*100, 1)),
+  hip = c('Hip Weakness', hip_count, round(hip_count/total*100, 1)),
+  lat = c('Lat Tightness', lat_count, round(lat_count/total*100, 1)),
+  calf = c('Calf Tightness', calf_count, round(calf_count/total*100, 1)),
+  low_ecc = c('Ecc. Assym. btw 5-10%', low_ecc_count, round(low_ecc_count/total*100, 1)),
+  high_ecc = c('Ecc. Assym. >10%', high_ecc_count, round(high_ecc_count/total*100, 1)),
+  low_con = c('Con. Assym. btw 5-10%', low_con_count, round(low_con_count/total*100, 1)),
+  high_con = c('Con. Assym. >10%', high_con_count, round(high_con_count/total*100, 1)),
+  low_land = c('Landing Assym. btw 5-10%', low_land_count, round(low_land_count/total*100, 1)),
+  high_land = c('Landing Assym. >10%', high_con_count, round(high_con_count/total*100, 1))
+)
+
+t_output_all <- t(output_all)
+kable(t_output_all,
+      caption = 'Counts of Athletes',
+      row.names = FALSE,
+      col.names = c('', 'Count', paste('% Total (', length(data$jump_height), ')', sep = '')),
+      format = 'html',
+      align = 'lcc',
+      valign = 't'
+    ) %>%
+  kable_styling(bootstrap_options = c('striped', 'hover'))
+
+data_filter <- data[data$ecc_mean_force_assym > 0.10, ]
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
+
+output_filter <- data.frame(
+  header = c('', 'Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
+  quad = c('Quad Tightness', quad_count, round(quad_count/total*100, 1)),
+  hip = c('Hip Weakness', hip_count, round(hip_count/total*100, 1)),
+  lat = c('Lat Tightness', lat_count, round(lat_count/total*100, 1)),
+  calf = c('Calf Tightness', calf_count, round(calf_count/total*100, 1)),
+  pain = c('Pain History', pain_count, round(pain_count/total*100, 1))
+)
+
+t_output_filter_ecc <- t(output_filter)
+
+data_filter <- data[data$con_mean_force_assym > 0.10, ]
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
+
+output_filter <- data.frame(
+  header = c('Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
+  quad = c(quad_count, round(quad_count/total*100, 1)),
+  hip = c(hip_count, round(hip_count/total*100, 1)),
+  lat = c(lat_count, round(lat_count/total*100, 1)),
+  calf = c(calf_count, round(calf_count/total*100, 1)),
+  pain = c(pain_count, round(pain_count/total*100, 1))
+)
+
+t_output_filter_con <- t(output_filter)
+
+
+data_filter <- data[data$peak_assym > 0.10, ]
+total <- as.integer(length(data_filter$jump_height))
+quad_count <- as.integer(length(which(data_filter$quad == 'N')))
+hip_count <- as.integer(length(which(data_filter$gator == 'N')))
+lat_count <- as.integer(length(which(data_filter$lat == 'Y')))
+calf_count <- as.integer(length(which(data_filter$calf == 'Y')))
+pain_count <- as.integer(length(which(data_filter$pain == 'Y')))
+
+output_filter <- data.frame(
+  header = c('Count', paste('% Total (', length(data_filter$jump_height), ')', sep = '')),
+  quad = c(quad_count, round(quad_count/total*100, 1)),
+  hip = c(hip_count, round(hip_count/total*100, 1)),
+  lat = c(lat_count, round(lat_count/total*100, 1)),
+  calf = c(calf_count, round(calf_count/total*100, 1)),
+  pain = c(pain_count, round(pain_count/total*100, 1))
+)
+
+t_output_filter_land <- t(output_filter)
+
+
+t_output_full <- cbind(t_output_filter_ecc, t_output_filter_con, t_output_filter_land)
+kable(t_output_full,
+      caption = 'Athletes by Assymetries',
+      row.names = FALSE,
+      align = 'lcccccc'
+    ) %>%
+  kable_styling(bootstrap_options = c('striped', 'hover')) %>%
+add_header_above(
+      c('', 
+        'Ecc. Assym. >10%' = 2, 
+        'Con. Assym. >10%' = 2, 
+        'Landing Assym. >10%' = 2),
+      underline = FALSE,
+      bold = TRUE)
+
+data_filter <- data[data$pain == 'Y',]
+pain_counts <- data.frame(
+  total = c(length(data_filter$jump_height)),
+  hip = c(length(which(data_filter$gator == 'N'))),
+  quad = c(length(which(data_filter$quad == 'Y'))),
+  lat = c(length(which(data_filter$lat == 'Y'))),
+  calf = c(length(which(data_filter$calf == 'Y'))),
+  ecc = c(length(which(data_filter$ecc_mean_force_assym >= 0.1))),
+  con = c(length(which(data_filter$con_mean_force_assym >= 0.1))),
+  land = c(length(which(data_filter$peak_assym >= 0.1)))
+)
+
+kable(pain_counts,
+      caption = 'Athletes with Aches and Pains',
+      row.names = FALSE,
+      col.names = c('Total',
+                    'Hip',
+                    'Quad',
+                    'Lat',
+                    'Calf',
+                    'Ecc.',
+                    'Con.',
+                    'Landing'),
+      align = 'c'
+      ) %>%
+  kable_styling(bootstrap_options = c('striped', 'hover')) %>%
+  add_header_above(
+    c('',
+      '',
+      'Tightness' = 3,
+      'Assymetries' = 3)
+  )
+
+```
+
+{{< pagebreak >}}
+
+# Raw Data
+
+```{r}
+#| output: asis
+
+#sumtable(select(data, Athlete, jump_height, rsi, gator, calf, lat, -Team), simple.kable = TRUE)
+  
+data %>%
+  select(Athlete, jump_height, rsi, gator, calf, lat, quad, pain) %>%
+  arrange(by = Athlete) %>%
+  kable(caption = 'Raw data from testing.', 
+        digits = 2, 
+        format.args = list(scientific = FALSE),
+        col.names = c('Athlete', 'CMJ', 'mRSI', 'Hip Weakness', 'Calf', 'Lat', 'Quad Tightness', 'Pain History'),
+        row.names = FALSE) %>%
+  kable_styling(bootstrap_options = 'striped')
+
+
+```
