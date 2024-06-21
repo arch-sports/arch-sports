@@ -19,7 +19,7 @@ margin-top: 1.0in
 margin-left: 0.75in
 editor: visual
 params:
-  Athlete: 'NA'
+  Athlete: 'Latterio Robinson'
   Team: 'NA'
 execute: 
   cache: false
@@ -134,27 +134,39 @@ type <- c('High Assymetry',
            'Quad Tightness', 
            'Hip Weakness')
 
+photo <- c('../Exercise Pictures/stock.png',
+           '../Exercise Pictures/stock.png',
+           '../Exercise Pictures/stock.png',
+           '../Exercise Pictures/stock.png',
+           '../Exercise Pictures/stock.png')
+
 output <- data.frame(
   Type = type,
   Result = athlete_col,
-  Recommend = recommend
+  Recommend = recommend,
+  Photo = ''
 )
 output_empty <- data.frame(
   Result = c('General Strength\nand Conditioning'),
   Recommend = c("Follow a general strength and conditioning\nprogram under the guidance of a certified professional.")
 )
-colnames(output) <- c('Type', 'Results', 'Recommend')
+colnames(output) <- c('Type', 'Results', 'Recommend', 'Photo')
 
-output_final <- na.omit(output[output$Result,]) %>% select(Type, Recommend)
+output_final <- na.omit(output[output$Result,]) %>% select(Type, Recommend, Photo)
+
+test <- c()
+for(type in output_final$Type){
+  test <- append(test, paste('../Exercise Pictures/', type, '.png', sep = ''))
+}
 
 if(nrow(output_final) > 0){
-  kable(output_final,
-      col.names = c('Result', 'Recommendation'),
+  knitr::kable(output_final,
+      col.names = c('Result', 'Recommendation', 'Photo'),
       row.names = FALSE,
     ) %>%
   kable_styling(bootstrap_options = c('striped', 'hover')) %>%
   row_spec(row = 1:(nrow(output_final) - 1), hline_after = TRUE) %>%
-  column_spec(column = 2, width = '32em')
+  column_spec(column = 3, image = spec_image(test, width = 600, height = 400))
 } else {
   kable(output_empty,
         col.names = c('Result', 'Recommendation'),
@@ -167,6 +179,10 @@ if(nrow(output_final) > 0){
 
 
 ```
+
+:::{output}
+
+:::
 
 ::: {contact}
 <p>

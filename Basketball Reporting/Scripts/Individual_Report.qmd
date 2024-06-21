@@ -118,7 +118,7 @@ recommend <- c(
   -- Wall Ankle Dorsiflexion -- 1/2 Kneeling Calf Stretch',
   
   lat = 'Lat Stretches, including:\n
-  -- Prayer Stretches -- Dead Hangs -- Wall/Floor Angels',
+  -- Prayer Stretches -- Wall/Floor Angels',
   
   quad = 'Quad Stretches, including:\n
   -- Standing Quad Pull -- Hurdler Stretch -- Couch Stretch',
@@ -133,10 +133,17 @@ type <- c('High Assymetry',
            'Quad Tightness', 
            'Hip Weakness')
 
+photo <- c('![](../Exercise Pictures/stock.png',
+           '![](../Exercise Pictures/stock.png',
+           '![](../Exercise Pictures/stock.png',
+           '![](../Exercise Pictures/stock.png',
+           '![](../Exercise Pictures/stock.png')
+
 output <- data.frame(
   Type = type,
   Result = athlete_col,
-  Recommend = recommend
+  Recommend = recommend,
+  Picture = photo
 )
 output_empty <- data.frame(
   Result = c('General Strength\nand Conditioning'),
@@ -145,6 +152,13 @@ output_empty <- data.frame(
 colnames(output) <- c('Type', 'Results', 'Recommend')
 
 output_final <- na.omit(output[output$Result,]) %>% select(Type, Recommend)
+
+# for(row in output_final){
+#   tags$body(
+#     h4(row$Type),
+#     p(row$Recommend)
+#   )
+# }
 
 if(nrow(output_final) > 0){
   kable(output_final,
@@ -168,7 +182,7 @@ if(nrow(output_final) > 0){
 ::: {contact}
 <p>
 
-|   _If you have any questions regarding these recommendations, please contact Architech Sports and Physical Therapy at_ (980) 207-2707 _and mention that you are with Pro Skills Basketball_
+|   *If you have any questions regarding these recommendations, please contact Architech Sports and Physical Therapy at* (980) 207-2707 *and mention that you are with Pro Skills Basketball*
 
 </p>
 :::
