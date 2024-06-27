@@ -1,0 +1,57 @@
+---
+title: "Monthly Report"
+format: html
+editor: visual
+execute: 
+  echo: false
+  warning: false
+  cache: false
+---
+
+```{r}
+library(kableExtra)
+library(tidyverse)
+library(ggplot2)
+
+# Read data from summary_data csv
+file_name <- paste(year(Sys.Date()), '_', month(Sys.Date()), '_summary_data.csv'
+                   , sep = '')
+full_file_name <- paste(year(Sys.Date()), '_', month(Sys.Date()), '_testing_data.csv', sep = '')
+
+data <- read.csv(file = file_name)
+athletes <- unique(data$Name)
+full_data <- read.csv(file = full_file_name)
+full_data <- full_data[full_data$Name %in% athletes,]
+full_data$Date <- as.Date(full_data$Date)
+
+# Create CMJ Table
+split_data <- split(full_data$CMJ...Imp.Mom, full_data$Name)
+
+data[!is.na(data$CMJ...Imp.Mom_Current), ] %>%
+  cbind('Trend' = '') %>%
+  select(
+    Name,
+    Trend,
+    starts_with('CMJ')) %>%
+  mutate(CMJ...Imp.Mom_Best_perc = (CMJ...Imp.Mom_Best_perc * 100),
+         CMJ...Imp.Mom_Last_perc = (CMJ...Imp.Mom_Last_perc * 100)) %>%
+  kable(
+    digits = 2,
+    row.names = FALSE,
+    col.names = c('Name',
+                  'Trend',
+                  'Current',
+                  'Best',
+                  'Best Change',
+                  'Best % Change',
+                  'Previous',
+                  'Previous Change',
+                  'Previous % Change'
+                  )
+  ) %>%
+  kable_styling(
+    full_width = TRUE,
+    fixed_thead = TRUE
+  ) %>%
+  column_spec(2, image = spec_plot(split_data))
+```
