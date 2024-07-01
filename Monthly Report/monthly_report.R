@@ -13,28 +13,29 @@ file_name <- paste('./', year(Sys.Date()),'_', month(Sys.Date()), '_testing_data
 
 if (!file.exists(file_name)) {
   data <- read_sheet(test_url, sheet = test_sheet)
-  write.csv(data,
-            file = file_name,
-            row.names = FALSE)
+  data %>%
+    mutate(YOUNG      = ifelse(data$AGE <= 13, 1, 0),
+           OLD        = ifelse(data$AGE> 13 & data$AGE <= 18, 1, 0),
+           ADULT      = ifelse(data$AGE > 18, 1, 0),
+           DATE_MONTH = month(DATE),
+           NORDBORD   = rowMeans(cbind(data$NORDBORD_L, data$NORDBORD_R), na.rm = TRUE)) %>%
+    write.csv(file = file_name,
+              row.names = FALSE)
 } else {
   data <- read.csv(file = file_name)
 }
-names(data) <- str_replace_all(names(data), '//.*', "_")
+
+find_min <- c('PRO_AGILITY', 'SPLIT_10', 'SPRINT_20', 'SHUTTLE_300')
 
 # Add dummy column for whether athlete <= 13 years old
-data <- data %>%
-  mutate(Young = ifelse(data$Age.At.Testing <= 13, 1, 0),
-         Old   = ifelse(data$Age.At.Testing > 13 & data$Age.At.Testing <= 18, 1, 0),
-         Adult = ifelse(data$Age.At.Testing > 18, 1, 0),
-         Month = month(Date),
-         Nordbord = rowMeans(cbind(data$Nordbord.Max.L, data$Nordbord.Max.R), na.rm = TRUE))
+
 
 # Get last month's and this month's testing data
-data_last    <- data[month(data$Date) == month(Sys.Date()) - 1,]
-data_current <- data[month(data$Date) == month(Sys.Date()),]
+data_last    <- data[month(data$DATE) == month(Sys.Date()) - 1,]
+data_current <- data[month(data$DATE) == month(Sys.Date()),]
 
 # Get athletes who tested last month
-athletes <- unique(data_current$Name)
+athletes <- unique(data_current$NAME)
 
 # Create function list for summary table
 func_list <- list(
@@ -49,29 +50,29 @@ func_list <- list(
 
 # Create variable list for summary table
 var_list <- c(
-  'Name',
-  'Date',
-  'Month',
-  'Age.At.Testing',
-  'CMJ...Flight',
-  'IMTP.Peak',
-  'Young',
-  'Old',
-  'Adult',
+  'NAME',
+  'DATE',
+  'DATE_MONTH',
+  'AGE',
+  'CMJ_FLIGHT',
+  'IMTP_PEAK',
+  'YOUNG',
+  'OLD',
+  'ADULT',
   'DSI',
-  'Nordbord...Diff',
-  'Nordbord.Max.L',
-  'Nordbord.Max.R'
+  'NORDBORD_DIFF',
+  'NORDBORD_L',
+  'NORDBORD_R'
 )
 
 summary_data <- data %>%
-  select(-Young, - Old, -Adult) %>%
-  group_by(Name) %>%
+  #select(-YOUNG, - OLD, -ADULT) %>%
+  group_by(NAME) %>%
   summarise_at(
     .vars = names(data)[!names(data) %in% var_list],
     .funs = func_list
   ) %>% 
-  filter(Name %in% athletes)
+  filter(NAME %in% athletes)
 
 summary_data[summary_data == -Inf] <- NA
 summary_data[summary_data == Inf] <- NA

@@ -18,40 +18,396 @@ file_name <- paste(year(Sys.Date()), '_', month(Sys.Date()), '_summary_data.csv'
                    , sep = '')
 full_file_name <- paste(year(Sys.Date()), '_', month(Sys.Date()), '_testing_data.csv', sep = '')
 
-data <- read.csv(file = file_name)
-athletes <- unique(data$Name)
-full_data <- read.csv(file = full_file_name)
-full_data <- full_data[full_data$Name %in% athletes,]
-full_data$Date <- as.Date(full_data$Date)
+data           <- read.csv(file = file_name)
+athletes       <- unique(data$NAME)
+full_data      <- read.csv(file = full_file_name)
+full_data      <- full_data[full_data$NAME %in% athletes,] %>%
+                  arrange(NAME)
+full_data$Date <- as.Date(full_data$DATE)
+tests          <- full_data %>%
+                  select(-NAME,
+                         -DATE,
+                         -AGE, 
+                         -IMTP_PEAK, 
+                         -DATE_MONTH, 
+                         -NORDBORD_L, 
+                         -NORDBORD_R, 
+                         -NORDBORD_DIFF, 
+                         -DSI, 
+                         -OLD, 
+                         -YOUNG, 
+                         -ADULT, 
+                         -CMJ_FLIGHT) %>%
+                  names()
 
-# Create CMJ Table
-split_data <- split(full_data$CMJ...Imp.Mom, full_data$Name)
-
-data[!is.na(data$CMJ...Imp.Mom_Current), ] %>%
-  cbind('Trend' = '') %>%
-  select(
-    Name,
-    Trend,
-    starts_with('CMJ')) %>%
-  mutate(CMJ...Imp.Mom_Best_perc = (CMJ...Imp.Mom_Best_perc * 100),
-         CMJ...Imp.Mom_Last_perc = (CMJ...Imp.Mom_Last_perc * 100)) %>%
-  kable(
-    digits = 2,
-    row.names = FALSE,
-    col.names = c('Name',
-                  'Trend',
-                  'Current',
-                  'Best',
-                  'Best Change',
-                  'Best % Change',
-                  'Previous',
-                  'Previous Change',
-                  'Previous % Change'
-                  )
-  ) %>%
-  kable_styling(
-    full_width = TRUE,
-    fixed_thead = TRUE
-  ) %>%
-  column_spec(2, image = spec_plot(split_data))
 ```
+
+::: {.panel-tabset}
+
+```{r}
+#| output: asis
+res <- for (test in tests) {
+  knitr::knit_child(input = 'Monthly Report Template.qmd', quiet = TRUE)
+}
+
+cat(unlist(res), sep = '\n')
+```
+<!-- ::: -->
+
+
+<!-- ::: panel-tabset -->
+<!-- ## CMJ -->
+<!-- ```{r} -->
+<!-- # Create CMJ Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$CMJ...Imp.Mom_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$CMJ...Imp.Mom, test_data$Name) -->
+
+<!-- data[!is.na(data$CMJ...Imp.Mom_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('CMJ')) %>% -->
+<!--   mutate(CMJ...Imp.Mom_Best_perc = (CMJ...Imp.Mom_Best_perc * 100), -->
+<!--          CMJ...Imp.Mom_Last_perc = (CMJ...Imp.Mom_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## Broad Jump -->
+<!-- ```{r} -->
+<!-- # Create Broad Jump Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$Broad.Jump_Current)])  -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$Broad.Jump, test_data$Name) -->
+
+<!-- data[!is.na(data$Broad.Jump_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('Broad')) %>% -->
+<!--   mutate(Broad.Jump_Best_perc = (Broad.Jump_Best_perc * 100), -->
+<!--          Broad.Jump_Last_perc = (Broad.Jump_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## IMTP -->
+<!-- ```{r} -->
+<!-- # Create IMTP Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$IMTP.F.BW_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$IMTP.F.BW, test_data$Name) -->
+
+<!-- data[!is.na(data$IMTP.F.BW_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('IMTP.F.BW')) %>% -->
+<!--   mutate(IMTP.F.BW_Best_perc = (IMTP.F.BW_Best_perc * 100), -->
+<!--          IMTP.F.BW_Last_perc = (IMTP.F.BW_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## Pull-Ups -->
+<!-- ```{r} -->
+<!-- # Create Pull-Up Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$Pull.Ups_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$Pull.Ups, test_data$Name) -->
+
+<!-- data[!is.na(data$Pull.Ups_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('Pull.Ups')) %>% -->
+<!--   mutate(Pull.Ups_Best_perc = (Pull.Ups_Best_perc * 100), -->
+<!--          Pull.Ups_Last_perc = (Pull.Ups_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## Flexed Hang -->
+<!-- ```{r} -->
+<!-- # Create Flex Arm Hang Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$Flexed.Hang_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$Flexed.Hang, test_data$Name) -->
+
+<!-- data[!is.na(data$Flexed.Hang_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('Flexed')) %>% -->
+<!--   mutate(Flexed.Hang_Best_perc = (Flexed.Hang_Best_perc * 100), -->
+<!--          Flexed.Hang_Last_perc = (Flexed.Hang_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## 10-Yd -->
+<!-- ```{r} -->
+<!-- # Create 10yd Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$X10.Yard.Split_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$X10.Yard.Split, test_data$Name) -->
+
+<!-- data[!is.na(data$X10.Yard.Split_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('X10')) %>% -->
+<!--   mutate(X10.Yard.Split_Best_perc = (X10.Yard.Split_Best_perc * 100), -->
+<!--          X10.Yard.Split_Last_perc = (X10.Yard.Split_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## 20-Yd -->
+<!-- ```{r} -->
+<!-- # Create 20yd Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$X38482.00.s_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$X38482.00.s, test_data$Name) -->
+
+<!-- data[!is.na(data$X38482.00.s_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('X38482')) %>% -->
+<!--   mutate(X38482.00.s_Best_perc = (X38482.00.s_Best_perc * 100), -->
+<!--          X38482.00.s_Last_perc = (X38482.00.s_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## 300-Yd -->
+<!-- ```{r} -->
+<!-- # Create 300yd Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$X300.Yd_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$X300.Yd, test_data$Name) -->
+
+<!-- data[!is.na(data$X300.Yd_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('X300.Yd')) %>% -->
+<!--   mutate(X300.Yd_Best_perc = (X300.Yd_Best_perc * 100), -->
+<!--          X300.Yd_Last_perc = (X300.Yd_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## Yo-Yo -->
+<!-- ```{r} -->
+<!-- # Create Yo-Yo Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$Yo.Yo_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- split_data <- split(test_data$Yo.Yo, test_data$Name) -->
+
+<!-- data[!is.na(data$Yo.Yo_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('Yo.Yo')) %>% -->
+<!--   mutate(Yo.Yo_Best_perc = (Yo.Yo_Best_perc * 100), -->
+<!--          Yo.Yo_Last_perc = (Yo.Yo_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ## Nordbord -->
+<!-- ```{r} -->
+<!-- # Create Nordbord Table -->
+<!-- test_athletes <- unique(data$Name[!is.na(data$Nordbord_Current)]) -->
+<!-- test_data <- full_data[full_data$Name %in% test_athletes,] -->
+<!-- test_data <- test_data %>% -->
+<!--   mutate(Nordbord = rowMeans(cbind(test_data$Nordbord.Max.L, test_data$Nordbord.Max.R), na.rm = TRUE)) -->
+<!-- split_data <- split(test_data$Nordbord, test_data$Name) -->
+
+<!-- data[!is.na(data$Nordbord_Current),] %>% -->
+<!--   cbind('Trend' = '') %>% -->
+<!--   select( -->
+<!--     Name, -->
+<!--     Trend, -->
+<!--     starts_with('Nordbord')) %>% -->
+<!--   mutate(Nordbord_Best_perc = (Nordbord_Best_perc * 100), -->
+<!--          Nordbord_Last_perc = (Nordbord_Last_perc * 100)) %>% -->
+<!--   kable( -->
+<!--     digits = 2, -->
+<!--     row.names = FALSE, -->
+<!--     col.names = c('Name', -->
+<!--                   'Trend', -->
+<!--                   'Current', -->
+<!--                   'Best', -->
+<!--                   'Best Change', -->
+<!--                   'Best % Change', -->
+<!--                   'Previous', -->
+<!--                   'Previous Change', -->
+<!--                   'Previous % Change' -->
+<!--                   ) -->
+<!--   ) %>% -->
+<!--   kable_styling( -->
+<!--     full_width = TRUE, -->
+<!--     fixed_thead = TRUE -->
+<!--   ) %>% -->
+<!--   column_spec(2, image = spec_plot(split_data, same_lim = FALSE)) -->
+<!-- ``` -->
+<!-- ::: -->
+
+
