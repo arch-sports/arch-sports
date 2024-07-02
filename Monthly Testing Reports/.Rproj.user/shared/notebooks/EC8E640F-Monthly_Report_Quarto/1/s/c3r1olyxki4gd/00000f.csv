@@ -1,0 +1,9 @@
+"0","data           <- read.csv(file = file_NAME)
+"
+"2","Warning in file(file, ""rt"") :"
+"2","
+ "
+"2"," cannot open file './data/clean/2024_6_summary_data.csv': No such file or directory
+"
+"2","Error in file(file, ""rt"") : cannot open the connection
+"
