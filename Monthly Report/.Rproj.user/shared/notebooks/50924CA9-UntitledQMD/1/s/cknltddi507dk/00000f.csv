@@ -1,0 +1,16 @@
+"0","res <- purrr::map_chr(test, \(hw) {
+    knitr::knit_child('template_test.qmd', envir = environment(), quiet = TRUE)
+  })
+"
+"1","[1m[33mError[39m in `purrr::map_chr()`:[22m
+[38;5;252m[36mℹ[38;5;252m In index: 1.[39m
+[1mCaused by error in `setwd()`:[22m
+[33m![39m character argument expected
+Backtrace:
+[90m 1. [39m[1m[94mpurrr::map_chr([39m[22m...[1m[94m)[39m[22m
+[90m 2. [39mpurrr:::map_(""character"", .x, .f, ..., .progress = .progress)
+[90m 6. [39m[1mglobal[22m .f(.x[[i]], ...)
+[90m 7. [39m[1mknitr[22m::knit_child(...)
+[90m 8. [39mknitr::knit(..., tangle = opts_knit$get(""tangle""), envir = envir)
+[90m 9. [39m[1mbase[22m::setwd(opts_knit$get(""output.dir""))
+"

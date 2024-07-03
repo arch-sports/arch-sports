@@ -1,0 +1,7 @@
+"0","# Create Table
+file_name      <- paste(clean_path, params$year, '_', params$month, '_summary_data.csv', 
+                        sep = '')
+"
+"2","Error in paste(clean_path, params$year, ""_"", params$month, ""_summary_data.csv"",  : 
+  object 'params' not found
+"

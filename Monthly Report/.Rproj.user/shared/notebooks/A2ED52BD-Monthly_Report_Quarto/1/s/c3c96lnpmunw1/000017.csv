@@ -1,0 +1,4 @@
+"0","cat(res, sep = '\n')
+"
+"2","Error in cat(res, sep = ""\n"") : object 'res' not found
+"

@@ -1,0 +1,1 @@
+{"frames":[{"func":"paste(clean_path, params$year, \"_\", params$month, \"_summary_data.csv\", \n    sep = \"\")","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in paste(clean_path, params$year, \"_\", params$month, \"_summary_data.csv\",  : \n  object 'params' not found\n"}

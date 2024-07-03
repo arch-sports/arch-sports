@@ -1,0 +1,1 @@
+{"frames":[{"func":"cat(res, sep = \"\\n\")","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in cat(res, sep = \"\\n\") : object 'res' not found\n"}
