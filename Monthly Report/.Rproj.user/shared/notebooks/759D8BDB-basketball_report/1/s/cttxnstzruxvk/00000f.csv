@@ -1,0 +1,41 @@
+"0","output %>%
+  kable(
+    col.names = c('Pain',
+                  'N', 'Y', 'p-value',
+                  'N', 'Y', 'p-value',
+                  'N', 'Y', 'p-value',
+                  'N', 'Y', 'p-value',
+                  'N', 'Y', 'p-value',
+                  'Low', 'High', 'p-value',
+                  'Low', 'High', 'p-value',
+                  'Low', 'High', 'p-value'),
+    digits = 1
+  ) %>%
+  kable_styling(
+    bootstrap_options = c('striped', 'hover')
+  ) %>%
+  add_header_above(
+    c('',
+      'Pain' = 3,
+      'Hip'  = 3,
+      'Lat'  = 3,
+      'Calf' = 3,
+      'Quad' = 3,
+      'Con. Assym' = 3,
+      'Ecc. Assym' = 3,
+      'Land. Assym' = 3
+      )
+  ) %>%
+  column_spec(1, bold = TRUE) %>%
+  column_spec(c(4, 7, 10, 13, 16, 19, 22), border_right = TRUE) %>%
+  pack_rows(group_label = 'Hip Weakness', 3, 4) %>%
+  pack_rows(group_label = 'Lat Tightness', 5, 6) %>%
+  pack_rows(group_label = 'Calf Tightness', 7, 8) %>%
+  pack_rows(group_label = 'Quad Tightness', 9, 10) %>%
+  pack_rows(group_label = 'Con. Assymetry', 11, 12) %>%
+  pack_rows(group_label = 'Ecc. Assymetry', 13, 14) %>%
+  pack_rows(group_label = 'Landing Assymetry', 15, 16)
+"
+"2","Error in dimnames(x) <- dn : 
+  length of 'dimnames' [2] not equal to array extent
+"
