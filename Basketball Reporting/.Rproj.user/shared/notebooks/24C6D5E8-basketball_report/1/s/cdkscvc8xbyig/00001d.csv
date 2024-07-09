@@ -1,0 +1,10 @@
+"0","ggplot(data, mapping = aes(x = lat)) +
+  geom_histogram(color = 'black', fill = 'red', alpha = 0.5, stat = 'count') +
+  xlab('FMS Overhead Squat Lat Tightness') +
+  theme_classic()
+"
+"2","Warning in geom_histogram(color = ""black"", fill = ""red"", alpha = 0.5, stat = ""count"") :"
+"2","
+ "
+"2"," [38;5;252mIgnoring unknown parameters: `binwidth`, `bins`, and `pad`[39m
+"

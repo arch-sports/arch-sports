@@ -94,7 +94,7 @@ data[data$Athlete == params$Athlete, ] %>%
   add_header_above(
     c('',
       '',
-      'Assymetries' = 3,
+      'Asymmetries' = 3,
       'Tightness' = 3,
       '',
       ''),
@@ -128,7 +128,7 @@ recommend <- c(
   -- Lying Side Leg Raise -- Side Plank -- Gator Plank'
 )
 
-type <- c('High Assymetry', 
+type <- c('High Asymmetry', 
            'Calf Tightness', 
            'Lat Tightness', 
            'Quad Tightness', 
@@ -161,12 +161,12 @@ for(type in output_final$Type){
 
 if(nrow(output_final) > 0){
   knitr::kable(output_final,
-      col.names = c('Result', 'Recommendation', 'Photo'),
+      col.names = c('Result', 'Recommendation', ''),
       row.names = FALSE,
     ) %>%
   kable_styling(bootstrap_options = c('striped', 'hover')) %>%
   row_spec(row = 1:(nrow(output_final) - 1), hline_after = TRUE) %>%
-  column_spec(column = 3, image = spec_image(test, width = 600, height = 400))
+  column_spec(column = 3, image = spec_image(test, width = 350, height = 640))
 } else {
   kable(output_empty,
         col.names = c('Result', 'Recommendation'),
@@ -179,9 +179,6 @@ if(nrow(output_final) > 0){
 
 
 ```
-
-::: {output}
-:::
 
 ::: {contact}
 <p>

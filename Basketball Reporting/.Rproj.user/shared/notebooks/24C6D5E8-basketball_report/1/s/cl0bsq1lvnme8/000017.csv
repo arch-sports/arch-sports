@@ -1,0 +1,18 @@
+"0","ggplot(data, mapping = aes(x = rsi)) +
+  geom_rect(xmin = norms_cmj$""Modified.RSI..m.s.""[norms_cmj$Percentile == '25th'],
+            xmax = norms_cmj$""Modified.RSI..m.s.""[norms_cmj$Percentile == '75th'],
+            ymin = 0,
+            ymax = Inf,
+            fill = 'grey',
+            alpha = 0.3) +
+  geom_density(fill = 'red', alpha = 0.5) +
+  xlab('Reactive Strength Index - Modified') +
+  ylab(element_blank()) +
+  theme(axis.text.y = element_blank(),
+                axes.ticks.y = element_blank())
+"
+"2","Warning in plot_theme(plot) :"
+"2","
+ "
+"2"," [38;5;252mThe `axes.ticks.y` theme element is not defined in the element hierarchy.[39m
+"

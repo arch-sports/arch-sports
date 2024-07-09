@@ -1,0 +1,10 @@
+"0","ggplot(data, mapping = aes(x = gator)) + 
+  geom_histogram(stat = 'count', color = 'black', fill = 'red', alpha = 0.5) +
+  xlab('Gator Plank Hip Strength Assessment') +
+  theme_classic()
+"
+"2","Warning in geom_histogram(stat = ""count"", color = ""black"", fill = ""red"",  :"
+"2","
+ "
+"2"," [38;5;252mIgnoring unknown parameters: `binwidth`, `bins`, and `pad`[39m
+"

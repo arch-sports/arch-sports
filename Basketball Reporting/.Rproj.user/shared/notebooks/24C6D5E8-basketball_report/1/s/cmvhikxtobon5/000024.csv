@@ -1,0 +1,11 @@
+"0","output_stat %>%
+  kable(
+    caption = ""p-values from Fisher's Exact Test. Values <0.05 are significant"",
+    digits  = 3,
+    align = 'c'
+  ) %>%
+  kable_styling(
+    bootstrap_options = c('striped', 'hover')
+  )
+"
+"0",""
