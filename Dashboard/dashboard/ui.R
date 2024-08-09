@@ -37,25 +37,6 @@ fluidPage(
       
       uiOutput(outputId = "inputs"),
       
-      dateInput(inputId = "date",
-                label   = "Date"),
-
-      textInput(inputId = "athleteInput",
-                label   = "Athlete"),
-      
-      textInput(inputId = "run",
-                label   = "Run"),
-
-      numericInput(inputId = "split",
-                   label   = "Split",
-                   min     = 0,
-                   value   = 0),
-
-      numericInput(inputId = "sprint",
-                   label   = "Sprint",
-                   min     = 0,
-                   value   = 0),
-      
       actionButton(inputId = "addData",
                    label   = "Add data")
     ),

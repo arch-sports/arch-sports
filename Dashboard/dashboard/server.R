@@ -28,45 +28,82 @@ min_agg <- function(x) {
   }
 }
 
+
+
 # Define server logic required to draw a histogram
 function(input, output, session) {
-  output$inputs <- renderUI({
-    tmp <- speed()
-    
-    lapply(names(tmp), function(name){
-      textInput(inputId = name,
-                label   = name)
-    })
-  })
   
-  newData <- reactive({
-    tmp <- speed()
-    tmp <- tmp[is.na(tmp), ]
-  })
-  
-  observeEvent(input$addData, {
-    newData() %>%
-      add_row(
-        Date    = input$date,
-        Athlete = input$athleteInput,
-        Run     = input$run,
-        Split   = input$split,
-        Sprint  = input$sprint
-      ) %>%
-      newData()
+  create_row <- function(x) {
+    tib <- tibble(col = 1)
 
-  })
+    for (name in names(x)) {
+      tib <- cbind(tib, tibble("{name}" := input[[name]]))
+      print(tib)
+    }
   
+    tib$col <- NULL
+    return(tib)
+  }
+  
+  # Import file into speed variable
   speed <- reactive({
     file <- input$file
     if (is.null(file)) {
       return(NULL)
     } else {
       read_excel(path = as.character(file$datapath)) %>%
-      mutate(Date = as.Date(Date),
-             Run  = as.factor(Run))
+        mutate(Date = as.Date(Date),
+               Run  = as.factor(Run)) %>%
+        as.data.frame()
     }
   })
+  
+  # Create inputs for new data based on input file
+  output$inputs <- renderUI({
+    tmp <- speed()
+    
+    lapply(names(tmp), function(name) {
+      switch(class(tmp[[name]]),
+             "Date"      = dateInput(inputId = name,
+                                     label   = str_to_title(name)),
+             "numeric"   = numericInput(inputId = name,
+                                      label   = str_to_title(name),
+                                      value   = 0),
+             "factor"    = textInput(inputId = name,
+                                     label   = str_to_title(name)),
+             "character" = textInput(inputId = name,
+                                     label   = str_to_title(name)))
+    })
+  })
+  
+  # newData <- reactive({
+  #   tmp <- speed()[is.na(speed()), ]
+  #   
+  #   tib <- tibble(x = 1)
+  #   
+  #   for (name in names(tmp)) {
+  #     tib <- cbind(tib, tibble("{name}" := input[[name]]))
+  #   }
+  #   print(tib)
+  #   tib$x <- NULL
+  #   tib
+  # })
+  
+  newData <- reactive({
+    speed()[is.na(speed()), ]
+  })
+  
+  observeEvent(input$addData, {
+    new_row <- newData() %>%
+      create_row()
+    
+    
+    next_row <- newData() %>%
+      add_row(new_row)
+    
+  })
+  
+  
   
   observe({
     updateSelectInput(inputId  = "athlete",
@@ -127,6 +164,7 @@ function(input, output, session) {
     }
   })
   
+  # Create data table
   output$speedTable <- renderDataTable({
     datatable(data(), 
               rownames = FALSE,
